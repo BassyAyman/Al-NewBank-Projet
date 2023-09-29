@@ -1,1 +1,3 @@
-# al-newbank-23-24-al-23-24-g-v7
+# NewBank architecture project - v7
+
+* Authors: Ayman Bassy, Igor Melnyk, Tobias Bonifay, Mathieu Schalkwijk
