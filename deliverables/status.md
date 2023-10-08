@@ -1,25 +1,34 @@
-# Weekly status
+# Weekly Status (Week 40) :
 
-## Week 39 `sunday 2023-10-01`
+## What was done:
 
-### What was done
-* Study on the bank transaction model in real life
-* Understanding of the different components of a bank, and how it works in real life 
-* Architecture diagram has been made, based on how we could organise the thing to make a transaction
-* Flow Diagram has also been made to present the basic actual MVP flow
-* Study on how our MVP could respond to our scaling problematic
+* a diagram of all service 
+* a component diagram for the 2 spring service
+* Personas
+* User Stories
+* Study on the V7 subject : Scalability
 
-### What is planned
-* Decide if we want to make it an application based on different service, or a monolithic 3 tier architecture app
-* Decide on the techno that will be used for this project based on how we want to implement it
-* Decide on how we will expose our app to other external system
-* Try to implement a first flow going throug every part that make a transaction, to get started with the POC.
+## What is planned
 
-### Different from last week
-* new Architecture 
-### Issues
-* none
-### Risk
-* we are reducing the scope to the transaction systeme first, before all other functionality.
-### RYG flag
-* As there are many thing that have to be decided regarding the project, and that there's no implementation, we would say in between green and yellow.
+* For Tuesday, make a sequence diagram for each US
+* Start a first implementation if the model is validated
+
+## What's the difference from last week
+* The architecture has been modified again, to better meet requirements
+* Component diagrams for certain services have been added
+* New Persona and User Story
+
+## Issues : 
+
+* None
+
+## Risk : 
+
+* We are reducing the scope to the transaction system first, before all other functionality.
+* Uncertainty about certain hypotheses formulated to meet the subject's needs V7
+
+## RYG flag : 
+
+* Yellow : indeed we have a lot of new things for this time, but regarding the architecture, we made quite a lot of hypotheses 
+regarding the scalability and the neobank accessible in other country. So we may be taking the wrong path on this one which 
+Implies refactor.
