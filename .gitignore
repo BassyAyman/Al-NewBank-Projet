@@ -19,6 +19,9 @@ pom.xml.next
 **/spring-shell.log
 **/logs/
 
+### Node ###
+node_modules/
+
 ### STS (eclipse case for spring) ###
 .apt_generated
 .classpath
