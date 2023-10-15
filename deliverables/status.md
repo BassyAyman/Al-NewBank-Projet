@@ -2,21 +2,17 @@
 
 ## What was done:
 
-* a diagram of all service 
-* a component diagram for the 2 spring service
-* Personas
-* User Stories
-* Study on the V7 subject : Scalability
+* Modification on the service diagram 
+* scenarios of implementation to test limit based on the V7 subject : Scalability
+* CQRS solution modele added to the service diagram
 
 ## What is planned
 
-* For Tuesday, make a sequence diagram for each US
-* Start a first implementation if the model is validated
+* For Tuesday, have the implementation of the first Scenario ready
 
 ## What's the difference from last week
-* The architecture has been modified again, to better meet requirements
-* Component diagrams for certain services have been added
-* New Persona and User Story
+
+* The architecture : we have modified how we manage read and write with database into a CQRS model.
 
 ## Issues : 
 
@@ -24,11 +20,12 @@
 
 ## Risk : 
 
-* We are reducing the scope to the transaction system first, before all other functionality.
-* Uncertainty about certain hypotheses formulated to meet the subject's needs V7
+* Having a bad interpretation of the CQRS in our modele context
 
 ## RYG flag : 
 
-* Yellow : indeed we have a lot of new things for this time, but regarding the architecture, we made quite a lot of hypotheses 
-regarding the scalability and the neobank accessible in other country. So we may be taking the wrong path on this one which 
-Implies refactor.
+* Green : For this week, we know that we are following the good path in order to have a functionnal
+Neo-bank that is ok with our Version of it. And even if our suggestion about CQRS is not the good one,
+we will have an implementation of a first naive version that will demonstrate that in the case of a
+large scale system (that can handle mutch more request at the same time), the naive solution have issue
+and based on them, we will validate our supposition and solution.
