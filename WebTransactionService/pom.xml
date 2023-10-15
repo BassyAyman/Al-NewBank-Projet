@@ -20,6 +20,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.1.0</version>
         </dependency>
 
         <dependency>
@@ -30,6 +31,7 @@
     </dependencies>
 
     <build>
+        <finalName>web-transaction-service</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
