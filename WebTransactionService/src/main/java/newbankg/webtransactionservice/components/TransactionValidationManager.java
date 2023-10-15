@@ -17,11 +17,9 @@ public class TransactionValidationManager implements ITransactionValidator {
     IAccountValidator accountValidator;
 
     @Override
-    public void makeTransactionWithCardId(long cardId) {
-        // Card Validation
-        // TODO
-        // Account validation
+    public boolean makeTransactionWithCardId(long cardId) {
         LOGGER.log(Level.INFO, "Proceeding to account validation");
         accountValidator.checkAccountWithId(cardId);
+        return false;
     }
 }

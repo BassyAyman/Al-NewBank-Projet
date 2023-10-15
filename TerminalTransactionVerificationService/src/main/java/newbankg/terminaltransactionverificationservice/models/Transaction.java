@@ -14,4 +14,5 @@ package newbankg.terminaltransactionverificationservice.models;
  * @param transactionStatus 0 - pending, 1 - approved, 2 - declined
  * @param transactionResult 0 - success, 1 - fail
  */
-public record Transaction(String id, String cardId, String timestamp) {}
+public record Transaction(String id, long cardId, String timestamp) {
+}

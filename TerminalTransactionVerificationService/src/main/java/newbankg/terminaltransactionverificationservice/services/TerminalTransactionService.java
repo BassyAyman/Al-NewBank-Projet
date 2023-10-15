@@ -1,17 +1,17 @@
 package newbankg.terminaltransactionverificationservice.services;
-import newbankg.terminaltransactionverificationservice.interfaces.ITerminalTransactionService;
-import newbankg.terminaltransactionverificationservice.models.Transaction;
+
+import newbankg.webtransactionservice.interfaces.IAccountValidator;
+import newbankg.webtransactionservice.interfaces.ITransactionValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TerminalTransactionService implements ITerminalTransactionService {
-    @Override
-    public void createTransaction(Transaction transaction) {
-
-    }
+public class TerminalTransactionService implements ITransactionValidator {
+    @Autowired
+    IAccountValidator accountValidator;
 
     @Override
-    public void validateTransaction(Transaction transaction) {
-
+    public boolean makeTransactionWithCardId(long cardId) {
+        return accountValidator.checkAccountWithId(cardId);
     }
 }
