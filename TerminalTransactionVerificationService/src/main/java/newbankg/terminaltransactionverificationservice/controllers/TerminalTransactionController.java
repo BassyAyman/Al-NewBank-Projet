@@ -27,7 +27,7 @@ public class TerminalTransactionController {
                 return ResponseEntity.ok("Transaction is valid");
             }
             System.out.println("Transaction is valid but terminal transaction service is not available");
-            System.out.println("response was " + response + " for transaction " + transaction.toString() + " expected response was Transaction is valid");
+            System.out.printf("response was %s for transaction %s expected response was Transaction is valid%n", response, transaction);
             return ResponseEntity.badRequest().body("Transaction is valid but terminal transaction service is not available");
         }
 
