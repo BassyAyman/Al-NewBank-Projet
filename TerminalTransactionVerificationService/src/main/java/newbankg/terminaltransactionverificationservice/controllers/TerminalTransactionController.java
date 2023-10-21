@@ -3,17 +3,23 @@ package newbankg.terminaltransactionverificationservice.controllers;
 
 import newbankg.terminaltransactionverificationservice.models.Transaction;
 import newbankg.terminaltransactionverificationservice.services.TerminalTransactionService;
+import newbankg.webtransactionservice.controllers.WebTransactionController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.logging.Logger;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 public class TerminalTransactionController {
+
+    private static Logger LOGGER = Logger.getLogger(TerminalTransactionController.class.getName());
 
     @Autowired
     private TerminalTransactionService terminalTransactionService;
@@ -40,5 +46,16 @@ public class TerminalTransactionController {
         ResponseEntity<String> response = restTemplate.postForEntity(serviceUrl, transaction, String.class);
 
         return response.getBody();
+    }
+
+    @GetMapping(path = "checkHealth")
+    public ResponseEntity<String> checkHealth(){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        LOGGER.info("TerminalTransactionService is ok");
+        return ResponseEntity.ok("TerminalTransactionService is ok");
     }
 }
