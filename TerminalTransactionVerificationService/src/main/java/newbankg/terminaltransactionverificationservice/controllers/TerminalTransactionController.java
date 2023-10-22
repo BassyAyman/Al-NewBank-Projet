@@ -3,7 +3,6 @@ package newbankg.terminaltransactionverificationservice.controllers;
 
 import newbankg.terminaltransactionverificationservice.models.Transaction;
 import newbankg.terminaltransactionverificationservice.services.TerminalTransactionService;
-import newbankg.webtransactionservice.controllers.WebTransactionController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,7 +1,7 @@
 package newbankg.terminaltransactionverificationservice.components;
 
-import newbankg.webtransactionservice.interfaces.IAccountInformation;
-import newbankg.webtransactionservice.models.Account;
+import newbankg.terminaltransactionverificationservice.interfaces.IAccountInformation;
+import newbankg.terminaltransactionverificationservice.models.Account;
 import org.springframework.stereotype.Component;
 
 @Component

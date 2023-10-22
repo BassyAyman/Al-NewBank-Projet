@@ -1,6 +1,6 @@
 package newbankg.terminaltransactionverificationservice.components;
 
-import newbankg.webtransactionservice.interfaces.ILimitChecker;
+import newbankg.terminaltransactionverificationservice.interfaces.ILimitChecker;
 import org.springframework.stereotype.Component;
 
 @Component

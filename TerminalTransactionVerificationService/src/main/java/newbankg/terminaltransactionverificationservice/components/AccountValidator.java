@@ -1,10 +1,10 @@
 package newbankg.terminaltransactionverificationservice.components;
 
-import newbankg.webtransactionservice.interfaces.IAccountInformation;
-import newbankg.webtransactionservice.interfaces.IAccountValidator;
-import newbankg.webtransactionservice.interfaces.IBalanceChecker;
-import newbankg.webtransactionservice.interfaces.ILimitChecker;
-import newbankg.webtransactionservice.models.Account;
+import newbankg.terminaltransactionverificationservice.interfaces.IAccountInformation;
+import newbankg.terminaltransactionverificationservice.interfaces.IAccountValidator;
+import newbankg.terminaltransactionverificationservice.interfaces.IBalanceChecker;
+import newbankg.terminaltransactionverificationservice.interfaces.ILimitChecker;
+import newbankg.terminaltransactionverificationservice.models.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

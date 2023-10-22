@@ -1,7 +1,7 @@
 package newbankg.terminaltransactionverificationservice.services;
 
-import newbankg.webtransactionservice.interfaces.IAccountValidator;
-import newbankg.webtransactionservice.interfaces.ITransactionValidator;
+import newbankg.terminaltransactionverificationservice.interfaces.IAccountValidator;
+import newbankg.terminaltransactionverificationservice.interfaces.ITransactionValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
