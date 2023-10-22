@@ -2,17 +2,18 @@
 
 ## What was done:
 
-* Modification on the service diagram 
-* scenarios of implementation to test limit based on the V7 subject : Scalability
-* CQRS solution modele added to the service diagram
+* Implementation of some first service interacting in order to validate a transaction
+* new architecture at the database level, master-slave intercation for less complexity
+* architecture change when it comes to transaction that has been validate, in order to be more resilient
 
 ## What is planned
 
-* For Tuesday, have the implementation of the first Scenario ready
+* For Tuesday, have the scenario ready with a high number of transaction made
 
 ## What's the difference from last week
 
-* The architecture : we have modified how we manage read and write with database into a CQRS model.
+* The architecture
+* The code
 
 ## Issues : 
 
@@ -20,12 +21,8 @@
 
 ## Risk : 
 
-* Having a bad interpretation of the CQRS in our modele context
+*None
 
 ## RYG flag : 
 
-* Green : For this week, we know that we are following the good path in order to have a functionnal
-Neo-bank that is ok with our Version of it. And even if our suggestion about CQRS is not the good one,
-we will have an implementation of a first naive version that will demonstrate that in the case of a
-large scale system (that can handle mutch more request at the same time), the naive solution have issue
-and based on them, we will validate our supposition and solution.
+  * Yellow : At the architecture level, its ok, we know where we are going, and we have all the step that we are going to follow in order to create a good POC and to demonstrate that it's a the good one, using high number of transaction in order to test every kind of implementation that we would had before. So at the end we have a good architecture and we have data about the other ones that wasn't that good with some test as proof. BUT, at the implementation level, we have some services well implemented but its the second week were we started implementing, and we still dont have any test of high level number of transaction in order to test a naive implementation which is : Xnumberclient -> transactionService -> BD -> transactionService -> validationOK/KO. We are a bit late. But we started anticipate the second test which gonna include a load balancer, as a member of the party is currently implementing it.
