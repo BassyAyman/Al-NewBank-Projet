@@ -1,26 +1,22 @@
 package newbankg.webtransactionservice.models;
 
+
+import lombok.Data;
+
+@Data
 public class Account {
+    private Client clientAccount;
 
-    private String name;
-    private String lastname;
-    private long id;
+    /**
+     * Current Sold in the client account
+     */
+    private int amountMoney;
 
-    public Account(String name, String lastname, long id) {
-        this.name = name;
-        this.lastname = lastname;
-        this.id = id;
-    }
+    /**
+     * The amount of money after a transaction, that have to be debited to
+     * the client after the final transaction has been made in the banking network
+     */
+    private int inDebitAmount;
+    private int accountLimit;
 
-    public String getName() {
-        return name;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public long getId() {
-        return id;
-    }
 }

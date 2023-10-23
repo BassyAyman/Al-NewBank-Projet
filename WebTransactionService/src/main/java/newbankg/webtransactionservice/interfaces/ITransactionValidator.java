@@ -1,7 +1,9 @@
 package newbankg.webtransactionservice.interfaces;
 
+import newbankg.webtransactionservice.models.Transaction;
+
 public interface ITransactionValidator {
 
-    boolean makeTransactionWithCardId(long cardId);
+    boolean makeTransactionWithCardId(Transaction transaction);
 
 }

@@ -1,7 +1,9 @@
 package newbankg.webtransactionservice.components;
 
-import newbankg.webtransactionservice.interfaces.IAccountValidator;
+import newbankg.webtransactionservice.interfaces.accountbusness.IAccountValidator;
 import newbankg.webtransactionservice.interfaces.ITransactionValidator;
+import newbankg.webtransactionservice.interfaces.cartbusness.ValidateCardValidation;
+import newbankg.webtransactionservice.models.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +17,14 @@ public class TransactionValidationManager implements ITransactionValidator {
 
     @Autowired
     IAccountValidator accountValidator;
+    @Autowired
+    ValidateCardValidation validateCardValidation;
 
     @Override
-    public boolean makeTransactionWithCardId(long cardId) {
+    public boolean makeTransactionWithCardId(Transaction transaction) {
         LOGGER.log(Level.INFO, "Proceeding to account validation");
-        accountValidator.checkAccountWithId(cardId);
+        validateCardValidation.validateCartInTransactionContext(transaction);
+        accountValidator.checkAccountWithId(transaction);
         return false;
     }
 }
