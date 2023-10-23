@@ -63,10 +63,28 @@ public class TerminalTransactionController {
      * This method is used to add a mock user to the database
      * @return
      */
-    @PutMapping(path = "/addMockUser")
-    public ResponseEntity<String> addMockUser() {
-        long randomId = (long) (Math.random() * 1000);
-        Account account = accountRepository.save(new Account("John", "Doe", randomId));
-        return ResponseEntity.ok("User added:" + account.toString());
+    @PutMapping(path = "/addJohnDoe")
+    public ResponseEntity<String> addJohnDoe() {
+        LOGGER.info("Adding John Doe");
+        try {
+            Account account = accountRepository.save(new Account("John", "Doe", 1));
+            LOGGER.info("Added John Doe");
+            return ResponseEntity.ok("User added:" + account.toString());
+        } catch (Exception e) {
+            LOGGER.info("Could not add John Doe:" + e.getMessage());
+            return ResponseEntity.badRequest().body("Could not add John Doe");
+        }
+    }
+
+    @GetMapping(path = "/checkJohnDoe")
+    public ResponseEntity<String> checkJohnDoe() {
+        Account account = accountRepository.findById(1);
+        if (account == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        if (!account.getName().equals("John") || !account.getLastname().equals("Doe")) {
+            return ResponseEntity.badRequest().body("User is not John Doe");
+        }
+        return ResponseEntity.ok("User found:" + account.toString());
     }
 }
