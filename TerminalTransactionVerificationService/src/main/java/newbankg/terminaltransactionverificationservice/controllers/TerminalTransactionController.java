@@ -1,14 +1,12 @@
 package newbankg.terminaltransactionverificationservice.controllers;
 
-
+import newbankg.terminaltransactionverificationservice.models.Account;
 import newbankg.terminaltransactionverificationservice.models.Transaction;
+import newbankg.terminaltransactionverificationservice.repositories.AccountRepository;
 import newbankg.terminaltransactionverificationservice.services.TerminalTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.logging.Logger;
@@ -22,6 +20,9 @@ public class TerminalTransactionController {
 
     @Autowired
     private TerminalTransactionService terminalTransactionService;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @PostMapping(path = "/payOnline", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> processTransaction(@RequestBody Transaction transaction) {
@@ -56,5 +57,16 @@ public class TerminalTransactionController {
         }
         LOGGER.info("TerminalTransactionService is ok");
         return ResponseEntity.ok("TerminalTransactionService is ok");
+    }
+
+    /**
+     * This method is used to add a mock user to the database
+     * @return
+     */
+    @PutMapping(path = "/addMockUser")
+    public ResponseEntity<String> addMockUser() {
+        long randomId = (long) (Math.random() * 1000);
+        Account account = accountRepository.save(new Account("John", "Doe", randomId));
+        return ResponseEntity.ok("User added:" + account.toString());
     }
 }
