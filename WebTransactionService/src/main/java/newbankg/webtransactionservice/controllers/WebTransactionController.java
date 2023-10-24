@@ -22,7 +22,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         ITransactionValidator transactionValidator;
 
         @PostMapping(path = "payOnline", consumes = APPLICATION_JSON_VALUE)
-        public ResponseEntity<String> evaluateOrbitState(@RequestBody long cardId){
+        public ResponseEntity<String> payOnline(@RequestBody long cardId){
             transactionValidator.makeTransactionWithCardId(new Transaction());
             return ResponseEntity.ok("Card is ok");
         }
