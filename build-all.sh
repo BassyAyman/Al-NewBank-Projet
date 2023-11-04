@@ -5,6 +5,6 @@ cd TerminalTransactionVerificationService
 ./build.sh
 cd ..
 
-cd TerminalTransactionService
+cd WebTransactionService
 ./build.sh
 cd ..
