@@ -23,8 +23,9 @@ public class TransactionValidationManager implements ITransactionValidator {
     @Override
     public boolean makeTransactionWithCardId(Transaction transaction) {
         LOGGER.log(Level.INFO, "Proceeding to account validation");
-        validateCardValidation.validateCartInTransactionContext(transaction);
-        accountValidator.checkAccountWithId(transaction);
-        return false;
+        boolean isCardValid = validateCardValidation.validateCartInTransactionContext(transaction);
+        boolean isAccountValid = accountValidator.checkAccountWithId(transaction);
+        return isCardValid && isAccountValid;
     }
+
 }
