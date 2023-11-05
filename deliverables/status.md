@@ -26,7 +26,7 @@
 
 ## Risk : 
 
-*To take more time on the cache configuration, we will use redis which is well documented but we never know
+* To take more time on the cache configuration, we will use redis which is well documented but we never know
 
 ## RYG flag : 
 
