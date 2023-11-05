@@ -2,6 +2,19 @@
 
 set -e
 
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 <number-of-instances of terminal transaction service> <number-of-instances of web transaction service>"
+    exit 1
+fi
+
+cd TerminalTransactionVerificationService
+./build.sh # generate image for terminal transaction service
+cd ..
+
+cd WebTransactionService
+./build.sh # generate image for web transaction service
+cd ..
+
 function compile_dir()   # $1 is the dir to get it
 {
   echo "Preparing $1..."
@@ -14,7 +27,7 @@ compile_dir "retriever-service"
 compile_dir "update-service"
 
 echo "Starting Docker containers..."
-docker-compose up --build -d
+docker-compose up --build -d --scale terminal-transaction-docker-service=$1 --scale web-transaction-docker-service=$2
 echo "waiting the database run"
 sleep 5
 # Configure PostgreSQL and restart containers
