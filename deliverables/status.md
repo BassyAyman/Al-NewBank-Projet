@@ -1,14 +1,17 @@
-# Weekly Status (Week 42) :
+# Weekly Status (Week 44) :
 
 ## What was done:
 
-* Implementation of some first service interacting in order to validate a transaction
-* new architecture at the database level, master-slave intercation for less complexity
-* architecture change when it comes to transaction that has been validate, in order to be more resilient
+* Implementation of more busness on transaction validation side
+* Implementation of new write and read service
+* Implementation of a master slave relation database
+* Implementation of load balancer in front of transaction service 
 
 ## What is planned
 
-* For Tuesday, have the scenario ready with a high number of transaction made
+* Implementation cache and logic related in the write and read service
+* Implementation of what come after a transaction succed ( write impact on DB using kafka )
+* Probably migrate Read service to Spring Web Flux
 
 ## What's the difference from last week
 
@@ -17,12 +20,15 @@
 
 ## Issues : 
 
-* None
+* We couldn't go step by step in our architecture contruction, we planned to build step by step our thing and at each step test the limit to have kind a
+  historic of what we did to demonstrate it to legitimate our actual architecture as propably one of the "best" in terme of choice to response to our
+  problematique in this banc contexte.
 
 ## Risk : 
 
-*None
+*To take more time on the cache configuration, we will use redis which is well documented but we never know
 
 ## RYG flag : 
 
-  * Yellow : At the architecture level, its ok, we know where we are going, and we have all the step that we are going to follow in order to create a good POC and to demonstrate that it's a the good one, using high number of transaction in order to test every kind of implementation that we would had before. So at the end we have a good architecture and we have data about the other ones that wasn't that good with some test as proof. BUT, at the implementation level, we have some services well implemented but its the second week were we started implementing, and we still dont have any test of high level number of transaction in order to test a naive implementation which is : Xnumberclient -> transactionService -> BD -> transactionService -> validationOK/KO. We are a bit late. But we started anticipate the second test which gonna include a load balancer, as a member of the party is currently implementing it.
+  * Yellow : In architecture termes, we have something that for us is good and will not change in terme of database management.
+    In terme of implementation, We ended up doing a lot of configuration work in the short time we had off, but it took us a long time, and indeed it did. We still      have a few things to work out before we can put it all together and have a walking skeleton.
