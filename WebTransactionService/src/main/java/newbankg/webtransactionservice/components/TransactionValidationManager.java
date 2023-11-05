@@ -1,8 +1,8 @@
 package newbankg.webtransactionservice.components;
 
-import newbankg.webtransactionservice.interfaces.accountbusness.IAccountValidator;
 import newbankg.webtransactionservice.interfaces.ITransactionValidator;
-import newbankg.webtransactionservice.interfaces.cartbusness.ValidateCardValidation;
+import newbankg.webtransactionservice.interfaces.accountbusiness.IAccountValidator;
+import newbankg.webtransactionservice.interfaces.cartbusiness.ValidateCardValidation;
 import newbankg.webtransactionservice.models.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

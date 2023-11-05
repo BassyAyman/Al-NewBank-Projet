@@ -1,6 +1,6 @@
 package newbankg.webtransactionservice.components.cartvalidation;
 
-import newbankg.webtransactionservice.interfaces.cartbusness.AlgoCheck;
+import newbankg.webtransactionservice.interfaces.cartbusiness.AlgoCheck;
 import org.springframework.stereotype.Component;
 
 @Component

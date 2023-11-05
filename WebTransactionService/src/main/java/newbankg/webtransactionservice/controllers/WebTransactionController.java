@@ -4,8 +4,8 @@ import newbankg.webtransactionservice.interfaces.ITransactionValidator;
 import newbankg.webtransactionservice.models.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
     @RestController
     public class WebTransactionController {
 
-        private static Logger LOGGER = Logger.getLogger(WebTransactionController.class.getName());
+        private static final Logger LOGGER = Logger.getLogger(WebTransactionController.class.getName());
 
         @Autowired
         ITransactionValidator transactionValidator;
