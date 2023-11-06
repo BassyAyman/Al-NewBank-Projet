@@ -1,18 +1,6 @@
 version: '3.8'
 
 services:
-  # Old database
-#  account-db-service:
-#    image: postgres:13
-#    environment:
-#      POSTGRES_USER: user
-#      POSTGRES_PASSWORD: password
-#      POSTGRES_DB: account-db
-#      POSTGRES_PORT: 5432
-#    ports:
-#      - "5432:5432"
-#    volumes:
-#      - ./sql:/docker-entrypoint-initdb.d
 
   # Terminal Transaction Service load balancer
   nginx-lb-terminal:
@@ -27,8 +15,6 @@ services:
   # Terminal Transaction Service (Spring)
   terminal-transaction-docker-service:
     image: "terminal-transaction-service_image"
-#    depends_on:
-#       - account-db-service
 
   # Web Transaction Service load balancer
   nginx-lb-web:
@@ -43,8 +29,6 @@ services:
   # Web Transaction Service (Spring)
   web-transaction-docker-service:
     image: "web-transaction-service_image"
-#    depends_on:
-#        - account-db-service
 
   # PostGresDB Located in Greenland
   postgres-master:
@@ -62,7 +46,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgresql_master_data:/bitnami/postgresql
+#     - postgresql_master_data:/bitnami/postgresql # for the moment we don't need to persist data in the volume
+      - ./sql:/docker-entrypoint-initdb.d # directory sql contains all scripts to be exectued on startup
     networks:
       - igorbank-net
 
