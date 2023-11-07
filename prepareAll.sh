@@ -33,7 +33,7 @@ echo "waiting the database run"
 sleep 5
 # Configure PostgreSQL and restart containers
 echo "Setting up PostgreSQL..."
-docker exec -it clientinfo-database psql -U postgres -d clientinfo_db -c "CREATE USER IF NOT EXISTS reading_user WITH PASSWORD 'reading_pass';"
+docker exec -it clientinfo-database psql -U postgres -d clientinfo_db -c "CREATE USER reading_user WITH PASSWORD 'reading_pass';"
 docker exec -it clientinfo-database psql -U postgres -d clientinfo_db -c "GRANT CONNECT ON DATABASE clientinfo_db TO reading_user;"
 docker exec -it clientinfo-database psql -U postgres -d clientinfo_db -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO reading_user;"
 docker exec -it clientinfo-database psql -U postgres -d clientinfo_db -c "GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO reading_user;"
