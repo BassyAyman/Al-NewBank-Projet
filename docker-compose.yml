@@ -1,18 +1,8 @@
 version: '3.8'
 
 services:
-  account-db-service:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: account-db
-      POSTGRES_PORT: 5432
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./sql:/docker-entrypoint-initdb.d
 
+  # Terminal Transaction Service load balancer
   nginx-lb-terminal:
     image: nginx:latest
     depends_on:
@@ -22,7 +12,91 @@ services:
     volumes:
       - ./TerminalTransactionVerificationService/nginx.conf:/etc/nginx/nginx.conf:ro
 
+  # Terminal Transaction Service (Spring)
   terminal-transaction-docker-service:
     image: "terminal-transaction-service_image"
+
+  # Web Transaction Service load balancer
+  nginx-lb-web:
+    image: nginx:latest
     depends_on:
-        - account-db-service
+      - web-transaction-docker-service
+    ports:
+      - "80:80" # port 81 for terminal transactions and port 80 for web transactions
+    volumes:
+      - ./WebTransactionService/nginx.conf:/etc/nginx/nginx.conf:ro
+
+  # Web Transaction Service (Spring)
+  web-transaction-docker-service:
+    image: "web-transaction-service_image"
+
+  # PostGresDB Located in Greenland
+  postgres-master:
+    image: docker.io/bitnami/postgresql:11-debian-10
+    container_name: clientinfo-database
+    environment:
+      - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
+      - POSTGRESQL_LOG_HOSTNAME=true
+      - POSTGRESQL_REPLICATION_MODE=master
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_DATABASE=clientinfo_db
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "5432:5432"
+    volumes:
+#     - postgresql_master_data:/bitnami/postgresql # for the moment we don't need to persist data in the volume
+      - ./sql:/docker-entrypoint-initdb.d # directory sql contains all scripts to be exectued on startup
+    networks:
+      - igorbank-net
+
+  # PostGresDB slave read only located locally
+  postgres-slave:
+    image: docker.io/bitnami/postgresql:11-debian-10
+    container_name: clientinfo-database-slave
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRESQL_USERNAME=postgres
+      - ALLOW_EMPTY_PASSWORD=yes
+      - POSTGRESQL_MASTER_HOST=postgres-master
+      - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
+      - POSTGRESQL_LOG_HOSTNAME=true
+      - POSTGRESQL_REPLICATION_MODE=slave
+      - POSTGRESQL_REPLICATION_USER=repl_user
+      - POSTGRESQL_REPLICATION_PASSWORD=repl_password
+      - POSTGRESQL_MASTER_PORT_NUMBER=5432
+    depends_on:
+      - postgres-master
+    networks:
+      - igorbank-net
+
+  retriever-service:
+    container_name: retriever-service
+    build:
+      context: ./retriever-service
+    ports:
+      - "8081:8080"
+    networks:
+      - igorbank-net
+    depends_on:
+      - postgres-master
+
+  update-service:
+    container_name: update-service
+    build:
+      context: ./update-service
+    ports:
+      - "8082:8080"
+    networks:
+      - igorbank-net
+    depends_on:
+      - postgres-slave
+
+networks:
+  igorbank-net:
+    driver: bridge
+
+volumes:
+  postgresql_master_data:
