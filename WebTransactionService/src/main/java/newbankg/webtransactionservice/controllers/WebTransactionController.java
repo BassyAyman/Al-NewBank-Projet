@@ -1,5 +1,6 @@
 package newbankg.webtransactionservice.controllers;
 
+import newbankg.webtransactionservice.InvalidTransactionException;
 import newbankg.webtransactionservice.interfaces.ITransactionValidator;
 import newbankg.webtransactionservice.models.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         @PostMapping(path = "payOnline", consumes = APPLICATION_JSON_VALUE)
         public ResponseEntity<String> payOnline(@RequestBody Transaction transaction) {
             try {
-                if (transactionValidator.makeTransactionWithCardId(transaction)) {
-                    return ResponseEntity.ok("Transaction successful");
-                } else {
-                    return ResponseEntity.badRequest().body("Transaction failed");
-                }
+                Transaction validatedTransaction = transactionValidator.makeTransactionWithCardId(transaction);
+                // TODO: send transaction somewhere...
+                return ResponseEntity.ok("Transaction successful");
+            } catch (InvalidTransactionException e) {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
             } catch (NoSuchElementException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             } catch (Exception e) {

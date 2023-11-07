@@ -8,7 +8,7 @@ public class Transaction {
     private String clientFirstName;
     private String clientLastName;
     private int amountOfTransaction;
-    private String clientCreditCartNumber;
+    private String clientCreditCardNumber;
     private String clientCreditCartDateExpiration;
     private String clientCVV;
 

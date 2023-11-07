@@ -5,7 +5,6 @@ import newbankg.webtransactionservice.interfaces.accountbusiness.IAccountValidat
 import newbankg.webtransactionservice.interfaces.accountbusiness.IBalanceChecker;
 import newbankg.webtransactionservice.interfaces.accountbusiness.ILimitChecker;
 import newbankg.webtransactionservice.models.Account;
-import newbankg.webtransactionservice.models.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,12 +22,8 @@ public class AccountValidator implements IAccountValidator {
 
 
     @Override
-    public boolean checkAccountWithId(Transaction transaction) {
-        // Searching for account data
-        Account customerAccount = accountInformation.getAccountFromCardId(transaction);
-        // Check spend limit
-        return limitChecker.checkLimit(transaction.getAmountOfTransaction(), customerAccount.getAccountLimit()) &&
-                // Check balance
-                balanceChecker.isBalanceOk(transaction.getAmountOfTransaction(), customerAccount.getAmountMoney());
+    public boolean checkAccount(Account account, int amountOfTransaction) {
+        return limitChecker.checkLimit(amountOfTransaction, account.getAccountLimit())  //
+                && balanceChecker.isBalanceOk(amountOfTransaction, account.getAmountMoney());
     }
 }

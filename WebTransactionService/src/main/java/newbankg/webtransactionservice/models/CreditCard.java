@@ -12,9 +12,9 @@ public class CreditCard {
     private Long id;
     @OneToOne
     private Client clientInformation;
-    @Column(name = "credit_cart_number")
-    private String creditCartNumber;
-    @Column(name = "credit_cart_date_expiration")
+    @Column(name = "credit_card_number")
+    private String creditCardNumber;
+    @Column(name = "credit_card_date_expiration")
     private String creditCartDateExpiration;
     @Column(name = "cvv")
     private String cvv;

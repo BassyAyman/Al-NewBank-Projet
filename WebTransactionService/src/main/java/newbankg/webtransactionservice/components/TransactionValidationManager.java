@@ -1,10 +1,14 @@
 package newbankg.webtransactionservice.components;
 
+import newbankg.webtransactionservice.InvalidTransactionException;
 import newbankg.webtransactionservice.interfaces.ITransactionValidator;
 import newbankg.webtransactionservice.interfaces.accountbusiness.IAccountValidator;
 import newbankg.webtransactionservice.interfaces.cartbusiness.ValidateCardValidation;
+import newbankg.webtransactionservice.models.Account;
 import newbankg.webtransactionservice.models.CreditCard;
 import newbankg.webtransactionservice.models.Transaction;
+import newbankg.webtransactionservice.repositories.AccountRepository;
+import newbankg.webtransactionservice.repositories.CreditCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,17 +25,44 @@ public class TransactionValidationManager implements ITransactionValidator {
     @Autowired
     ValidateCardValidation validateCardValidation;
 
-    @Override
-    public boolean makeTransactionWithCardId(Transaction transaction) {
-        LOGGER.log(Level.INFO, "Proceeding to account validation");
-        boolean isCardValid = validateCardValidation.validateCartInTransactionContext(transaction);
-        //TODO : recuperation de la carte depuis la DB et verifier que sa existe
-        //TODO : recuperation Account avec client id .
-        //TODO : Avec le compte et le montant de la transaction, faire les verifications
-        boolean isAccountValid = accountValidator.checkAccountWithId(transaction);
-        //TODO : une fois que tout est bon (validé), tu peux renvoyer OK et ta methode de verification doit renvoyer la transaction
-        //TODO : Quand a un moment des verification sa passe pas, pas faire de false, mais une exception personnalisé qui est renvoyer
-        return isCardValid && isAccountValid;
-    }
+    @Autowired
+    AccountRepository accountRepository;
 
+    @Autowired
+    CreditCardRepository creditCardRepository;
+
+    /**
+     * Check if the transaction is valid, if not throw an exception.
+     * Account is found by the card number. and the card is found by the transaction.
+     * <p>
+     * Transaction is valid if:
+     * - the card is valid:
+     * - the card is not expired
+     * - the card number is coherent
+     * - the card number is valid according to the Luhn algorithm
+     * - the account is valid:
+     * - the account has enough money
+     * - the account has enough limit
+     * - the account is not blocked, expired...closed.. maybe???
+     *
+     * @param transaction Transaction to check
+     * @throws InvalidTransactionException if the transaction is not valid
+     */
+    @Override
+    public Transaction makeTransactionWithCardId(Transaction transaction) throws InvalidTransactionException {
+        LOGGER.log(Level.INFO, "Proceeding to account validation");
+
+        CreditCard creditCard = creditCardRepository.findByCreditCardNumber(transaction.getClientCreditCardNumber());
+        if (null == creditCard || !validateCardValidation.validateCardInTransactionContext(creditCard)) {
+            LOGGER.log(Level.INFO, "Card is not valid");
+            throw new InvalidTransactionException("Card is not valid");
+        }
+
+        Account account = accountRepository.findbyClientCustomerIdentifier(creditCard.getClientInformation().getCustomerIdentifier());
+        if (null == account || !accountValidator.checkAccount(account, transaction.getAmountOfTransaction())) {
+            LOGGER.log(Level.INFO, "Account is not valid");
+            throw new InvalidTransactionException("Account is not valid");
+        }
+        return transaction;
+    }
 }

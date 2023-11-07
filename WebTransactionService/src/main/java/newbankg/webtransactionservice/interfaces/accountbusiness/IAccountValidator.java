@@ -1,9 +1,7 @@
 package newbankg.webtransactionservice.interfaces.accountbusiness;
 
-import newbankg.webtransactionservice.models.Transaction;
+import newbankg.webtransactionservice.models.Account;
 
 public interface IAccountValidator {
-
-    boolean checkAccountWithId(Transaction transaction);
-
+    boolean checkAccount(Account account, int amountOfTransaction);
 }
