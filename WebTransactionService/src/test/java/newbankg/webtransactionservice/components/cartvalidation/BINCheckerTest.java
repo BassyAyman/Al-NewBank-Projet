@@ -1,12 +1,12 @@
 package newbankg.webtransactionservice.components.cartvalidation;
 
-import newbankg.webtransactionservice.interfaces.cartbusness.BINCheck;
+import newbankg.webtransactionservice.interfaces.cartbusiness.BINCheck;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class BINCheckerTest {

@@ -1,6 +1,6 @@
 package newbankg.webtransactionservice.components.cartvalidation;
 
-import newbankg.webtransactionservice.interfaces.cartbusness.BINCheck;
+import newbankg.webtransactionservice.interfaces.cartbusiness.BINCheck;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;

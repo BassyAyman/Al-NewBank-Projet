@@ -1,4 +1,4 @@
-package newbankg.webtransactionservice.interfaces.cartbusness;
+package newbankg.webtransactionservice.interfaces.cartbusiness;
 
 public interface AlgoCheck {
 

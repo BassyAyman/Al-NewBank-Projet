@@ -1,4 +1,4 @@
-package newbankg.webtransactionservice.interfaces.accountbusness;
+package newbankg.webtransactionservice.interfaces.accountbusiness;
 
 import newbankg.webtransactionservice.models.Transaction;
 
