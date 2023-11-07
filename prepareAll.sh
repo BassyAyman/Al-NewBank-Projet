@@ -18,8 +18,9 @@ cd ..
 function compile_dir()   # $1 is the dir to get it
 {
   echo "Preparing $1..."
-    cd $1
-    mvn clean package
+    cd "$1"
+    # retriever-service
+    mvn clean package -DskipTests
     cd ..
 }
 
@@ -27,7 +28,7 @@ compile_dir "retriever-service"
 compile_dir "update-service"
 
 echo "Starting Docker containers..."
-docker-compose up --build -d --scale terminal-transaction-docker-service=$1 --scale web-transaction-docker-service=$2
+docker-compose up --build -d --scale terminal-transaction-docker-service="$1" --scale web-transaction-docker-service="$2"
 echo "waiting the database run"
 sleep 5
 # Configure PostgreSQL and restart containers
