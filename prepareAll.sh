@@ -23,7 +23,6 @@ function compile_dir()   # $1 is the dir to get it
     cd ..
 }
 
-compile_dir "retriever-service"
 compile_dir "update-service"
 
 echo "Starting Docker containers..."

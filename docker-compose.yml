@@ -37,7 +37,7 @@ services:
     ports:
       - "2181:2181"
     networks:
-      - marsy-net
+      - igorbank-net
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -50,7 +50,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     networks:
-      - marsy-net
+      - igorbank-net
 
   # PostGresDB Located in Greenland
   postgres-master:
@@ -94,16 +94,6 @@ services:
     networks:
       - igorbank-net
 
-  retriever-service:
-    container_name: retriever-service
-    build:
-      context: ./retriever-service
-    ports:
-      - "8081:8080"
-    networks:
-      - igorbank-net
-    depends_on:
-      - postgres-master
 
   update-service:
     container_name: update-service
