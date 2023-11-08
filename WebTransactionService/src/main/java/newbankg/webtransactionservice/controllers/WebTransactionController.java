@@ -5,6 +5,7 @@ import newbankg.webtransactionservice.models.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,10 +24,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         @Autowired
         ITransactionValidator transactionValidator;
 
+        @Autowired
+        private KafkaTemplate<String, Transaction> stringKafkaTemplate;
+
         @PostMapping(path = "payOnline", consumes = APPLICATION_JSON_VALUE)
         public ResponseEntity<String> payOnline(@RequestBody Transaction transaction) {
             try {
                 if (transactionValidator.makeTransactionWithCardId(transaction)) {
+                    stringKafkaTemplate.send("transactionWrite", transaction);
                     return ResponseEntity.ok("Transaction successful");
                 } else {
                     return ResponseEntity.badRequest().body("Transaction failed");
