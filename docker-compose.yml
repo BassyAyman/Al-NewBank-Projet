@@ -29,6 +29,8 @@ services:
   # Web Transaction Service (Spring)
   web-transaction-docker-service:
     image: "web-transaction-service"
+    ports:
+      - "8085:80"
 
   # Kafka setup
   zookeeper:
