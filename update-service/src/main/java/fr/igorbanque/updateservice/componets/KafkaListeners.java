@@ -7,8 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaListeners {
 
-    @KafkaListener(topics = "transactionWrite")
-    void listenerOnTransaction(Transaction transaction){
+    @KafkaListener(topics = "transactionWrite", groupId = "write")
+    void listenerOnTransaction(String transaction){
+        System.out.println("Transaction reçu");
         // TODO Store to master database
     }
 

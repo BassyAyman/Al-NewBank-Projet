@@ -33,7 +33,7 @@ services:
   # Kafka setup
   zookeeper:
     image: zookeeper:latest
-    container_name: zookeeper_igrbank
+    container_name: zookeeper
     ports:
       - "2181:2181"
     networks:
