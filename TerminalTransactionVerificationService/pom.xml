@@ -47,7 +47,7 @@
     </dependencies>
 
     <build>
-        <finalName>terminal-transaction-verification-service</finalName>
+        <finalName>terminal-transaction-service</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

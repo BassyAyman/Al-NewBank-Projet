@@ -14,7 +14,7 @@ services:
 
   # Terminal Transaction Service (Spring)
   terminal-transaction-docker-service:
-    image: "terminal-transaction-service_image"
+    image: "terminal-transaction-service"
 
   # Web Transaction Service load balancer
   nginx-lb-web:
@@ -28,12 +28,12 @@ services:
 
   # Web Transaction Service (Spring)
   web-transaction-docker-service:
-    image: "web-transaction-service_image"
+    image: "web-transaction-service"
 
   # Kafka setup
   zookeeper:
     image: zookeeper:latest
-    container_name: zookeeper
+    container_name: zookeeper_igrbank
     ports:
       - "2181:2181"
     networks:

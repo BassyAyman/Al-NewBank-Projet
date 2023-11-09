@@ -8,10 +8,12 @@ if [ $# -ne 2 ]; then
 fi
 
 cd TerminalTransactionVerificationService
+mvn clean install
 ./build.sh # generate image for terminal transaction service
 cd ..
 
 cd WebTransactionService
+mvn clean install
 ./build.sh # generate image for web transaction service
 cd ..
 
