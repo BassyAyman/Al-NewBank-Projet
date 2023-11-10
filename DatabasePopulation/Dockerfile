@@ -2,7 +2,7 @@ FROM openjdk:17-jdk-slim
 
 # Add app user
 ARG APPLICATION_USER=appuser
-ARG SERVICE_NAME=terminal-transaction-verification-service
+ARG SERVICE_NAME=database-population
 
 RUN adduser --disabled-password --gecos '' $APPLICATION_USER
 RUN mkdir /app && chown -R $APPLICATION_USER /app
@@ -16,7 +16,6 @@ COPY --chown=$APPLICATION_USER:root target/$SERVICE_NAME.jar /app/$SERVICE_NAME.
 # Set working directory
 WORKDIR /app
 
-EXPOSE 8081
 
 # Run the jar
-CMD ["java", "-jar", "terminal-transaction-verification-service.jar"]
+CMD ["java", "-jar", "database-population.jar"]

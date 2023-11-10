@@ -45,7 +45,6 @@ services:
   # PostGresDB Located in Greenland
   postgres-master:
     image: docker.io/bitnami/postgresql:11-debian-10
-    container_name: clientinfo-database
     environment:
       - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
       - POSTGRESQL_LOG_HOSTNAME=true
@@ -66,7 +65,6 @@ services:
   # PostGresDB slave read only located locally
   postgres-slave:
     image: docker.io/bitnami/postgresql:11-debian-10
-    container_name: clientinfo-database-slave
     ports:
       - "5433:5432"
     environment:
@@ -85,7 +83,6 @@ services:
       - igorbank-net
 
   update-service:
-    container_name: update-service
     build:
       context: ./update-service
     ports:
