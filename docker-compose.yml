@@ -4,6 +4,7 @@ services:
 
   # Terminal Transaction Service load balancer
   nginx-lb-terminal:
+    container_name: nginx-lb-terminal
     image: nginx:latest
     depends_on:
       - terminal-transaction-docker-service
@@ -16,6 +17,7 @@ services:
 
   # Terminal Transaction Service (Spring)
   terminal-transaction-docker-service:
+    container_name: terminal-transaction-docker-service
     build:
       context: ./TerminalTransactionVerificationService
     depends_on:
@@ -44,6 +46,7 @@ services:
 
   # PostGresDB Located in Greenland
   postgres-master:
+    container_name: postgres-master
     image: docker.io/bitnami/postgresql:11-debian-10
     environment:
       - POSTGRESQL_PGAUDIT_LOG=READ,WRITE
@@ -64,6 +67,7 @@ services:
 
   # PostGresDB slave read only located locally
   postgres-slave:
+    container_name: postgres-slave
     image: docker.io/bitnami/postgresql:11-debian-10
     ports:
       - "5433:5432"
@@ -77,12 +81,25 @@ services:
       - POSTGRESQL_REPLICATION_USER=repl_user
       - POSTGRESQL_REPLICATION_PASSWORD=repl_password
       - POSTGRESQL_MASTER_PORT_NUMBER=5432
+      - POSTGRESQL_STATEMENT_TIMEOUT=25000
     depends_on:
       - postgres-master
     networks:
       - igorbank-net
 
+  retriever-service:
+    container_name: retriever-service
+    build:
+      context: ./retriever-service
+    ports:
+      - "8081:8080"
+    networks:
+      - igorbank-net
+    depends_on:
+      - postgres-master
+
   update-service:
+    container_name: update-service
     build:
       context: ./update-service
     ports:
