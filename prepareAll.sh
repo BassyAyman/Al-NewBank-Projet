@@ -7,14 +7,6 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-cd TerminalTransactionVerificationService
-./build.sh # generate image for terminal transaction service
-cd ..
-
-cd WebTransactionService
-./build.sh # generate image for web transaction service
-cd ..
-
 function compile_dir()   # $1 is the dir to get it
 {
   echo "Preparing $1..."
@@ -26,6 +18,7 @@ function compile_dir()   # $1 is the dir to get it
 
 compile_dir "retriever-service"
 compile_dir "update-service"
+compile_dir "TerminalTransactionVerificationService"
 
 echo "Starting Docker containers..."
 docker-compose up --build -d --scale terminal-transaction-docker-service="$1" --scale web-transaction-docker-service="$2"
