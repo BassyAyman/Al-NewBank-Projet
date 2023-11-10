@@ -17,7 +17,7 @@ COPY --chown=$APPLICATION_USER:root target/$SERVICE_NAME.jar /app/$SERVICE_NAME.
 WORKDIR /app
 
 # docker run -p [port-host]:[port-container]
-EXPOSE 80
+EXPOSE 8080
 
 # Run the jar
 CMD ["java", "-jar", "web-transaction-service.jar"]

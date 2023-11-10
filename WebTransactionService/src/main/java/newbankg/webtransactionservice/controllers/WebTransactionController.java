@@ -30,6 +30,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         @PostMapping(path = "payOnline", consumes = APPLICATION_JSON_VALUE)
         public ResponseEntity<String> payOnline(@RequestBody Transaction transaction) {
             try {
+                stringKafkaTemplate.send("transactionWrite", transaction);
                 if (transactionValidator.makeTransactionWithCardId(transaction)) {
                     stringKafkaTemplate.send("transactionWrite", transaction);
                     return ResponseEntity.ok("Transaction successful");
@@ -39,7 +40,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
             } catch (NoSuchElementException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error" + e);
             }
         }
 
