@@ -16,7 +16,6 @@ public class TransactionDeserializer extends JsonDeserializer<Transaction> {
         String clientFirstName = node.get("clientFirstName").asText();
         String clientLastName = node.get("clientLastName").asText();
         int amountOfTransaction = node.get("amountOfTransaction").asInt();
-        String clientCreditCartNumber = node.get("clientCreditCartNumber").asText();
         String clientCreditCartDateExpiration = node.get("clientCreditCartDateExpiration").asText();
         String clientCVV = node.get("clientCVV").asText();
 
@@ -24,7 +23,6 @@ public class TransactionDeserializer extends JsonDeserializer<Transaction> {
                 clientFirstName,
                 clientLastName,
                 amountOfTransaction,
-                clientCreditCartNumber,
                 clientCreditCartDateExpiration,
                 clientCVV
         );

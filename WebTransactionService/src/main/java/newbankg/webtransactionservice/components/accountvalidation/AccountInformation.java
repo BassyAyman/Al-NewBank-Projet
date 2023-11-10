@@ -13,7 +13,7 @@ public class AccountInformation implements IAccountInformation {
 
     @Override
     public Account getAccountFromCardId(Transaction transaction) {
-        Optional<Account> accountOpt = findAccountByCardId(transaction.getClientCreditCartNumber());
+        Optional<Account> accountOpt = findAccountByCardId(transaction.getClientCreditCardNumber());
 
         return accountOpt.orElseThrow(() -> new NoSuchElementException("Card not found"));
     }

@@ -4,6 +4,6 @@ import newbankg.webtransactionservice.models.Transaction;
 
 public interface ITransactionValidator {
 
-    boolean makeTransactionWithCardId(Transaction transaction);
+    Transaction makeTransactionWithCardId(Transaction transaction);
 
 }

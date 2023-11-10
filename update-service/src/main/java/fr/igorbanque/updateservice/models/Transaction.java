@@ -15,17 +15,15 @@ public class Transaction implements Serializable {
     private String clientFirstName;
     private String clientLastName;
     private int amountOfTransaction;
-    private String clientCreditCartNumber;
     private String clientCreditCartDateExpiration;
     private String clientCVV;
 
     public Transaction(){}
 
-    public Transaction(String clientFirstName, String clientLastName, int amountOfTransaction, String clientCreditCartNumber, String clientCreditCartDateExpiration, String clientCVV) {
+    public Transaction(String clientFirstName, String clientLastName, int amountOfTransaction, String clientCreditCartDateExpiration, String clientCVV) {
         this.clientFirstName = clientFirstName;
         this.clientLastName = clientLastName;
         this.amountOfTransaction = amountOfTransaction;
-        this.clientCreditCartNumber = clientCreditCartNumber;
         this.clientCreditCartDateExpiration = clientCreditCartDateExpiration;
         this.clientCVV = clientCVV;
     }

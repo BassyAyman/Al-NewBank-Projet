@@ -1,4 +1,4 @@
-package newbankg.webtransactionservice.models;
+package newbankg.terminaltransactionverificationservice.models;
 
 
 import jakarta.persistence.Column;

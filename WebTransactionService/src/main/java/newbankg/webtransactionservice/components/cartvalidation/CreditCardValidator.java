@@ -3,7 +3,7 @@ package newbankg.webtransactionservice.components.cartvalidation;
 import newbankg.webtransactionservice.interfaces.cartbusiness.AlgoCheck;
 import newbankg.webtransactionservice.interfaces.cartbusiness.BINCheck;
 import newbankg.webtransactionservice.interfaces.cartbusiness.ValidateCardValidation;
-import newbankg.webtransactionservice.models.Transaction;
+import newbankg.webtransactionservice.models.CreditCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,10 +19,11 @@ public class CreditCardValidator implements ValidateCardValidation {
     AlgoCheck algoCheck;
 
     @Override
-    public boolean validateCartInTransactionContext(Transaction transaction) {
-        return binCheck.checkCreditCardNumberCoherence(transaction.getClientCreditCartNumber()) &&
-                algoCheck.validateCreditCardAlgoLuhn(transaction.getClientCreditCartNumber()) &&
-                !isCardExpired(transaction.getClientCreditCartDateExpiration());
+    public boolean validateCardInTransactionContext(CreditCard cb) {
+        String creditCardNumber = cb.getCreditCardNumber();
+        return !isCardExpired(cb.getCreditCartDateExpiration()) //
+                && binCheck.checkCreditCardNumberCoherence(creditCardNumber) //
+                && algoCheck.validateCreditCardAlgoLuhn(creditCardNumber);
     }
 
 
