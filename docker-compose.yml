@@ -20,7 +20,8 @@ services:
     build:
       context: ./TerminalTransactionVerificationService
     depends_on:
-      - postgres-slave
+      postgres-slave-canada:
+        condition: service_healthy
     networks:
       - igorbank-net
 
@@ -42,7 +43,8 @@ services:
     build:
       context: ./WebTransactionService
     depends_on:
-      - postgres-slave
+      postgres-slave:
+        condition: service_healthy
     networks:
       - igorbank-net
 
@@ -91,6 +93,11 @@ services:
       - postgres-master
     networks:
       - igorbank-net
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 3s
+      timeout: 30s
+      retries: 10
 
   # PostGresDB slave read only located locally
   postgres-slave-canada:
@@ -116,6 +123,11 @@ services:
       - postgres-master
     networks:
       - igorbank-net
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 3s
+      timeout: 30s
+      retries: 10
 
 #  retriever-service:
 #    container_name: retriever-service

@@ -1,8 +1,10 @@
 package newbankg.terminaltransactionverificationservice.controllers;
 
 import newbankg.terminaltransactionverificationservice.models.Account;
+import newbankg.terminaltransactionverificationservice.models.Client;
 import newbankg.terminaltransactionverificationservice.models.Transaction;
 import newbankg.terminaltransactionverificationservice.repositories.AccountRepository;
+import newbankg.terminaltransactionverificationservice.repositories.ClientRepository;
 import newbankg.terminaltransactionverificationservice.services.TerminalTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,9 @@ public class TerminalTransactionController {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @PostMapping(path = "/payOnline", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> processTransaction(@RequestBody Transaction transaction) {
@@ -78,13 +83,16 @@ public class TerminalTransactionController {
 
     @GetMapping(path = "/checkJohnDoe")
     public ResponseEntity<String> checkJohnDoe() {
-        Account account = accountRepository.findById(1);
-        if (account == null) {
+        Client client = clientRepository.findByCustomerIdentifier(1L);
+        if (client == null) {
+            LOGGER.info("User not found");
             return ResponseEntity.badRequest().body("User not found");
         }
-        if (!account.getName().equals("John") || !account.getLastname().equals("Doe")) {
+        if (!client.getFirstName().equals("John") || !client.getLastName().equals("Doe")) {
+            LOGGER.info("User is not John Doe");
             return ResponseEntity.badRequest().body("User is not John Doe");
         }
-        return ResponseEntity.ok("User found:" + account.toString());
+        LOGGER.info("User found:" + client.toString());
+        return ResponseEntity.ok("User found:" + client.toString());
     }
 }
