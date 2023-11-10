@@ -17,7 +17,6 @@ services:
 
   # Terminal Transaction Service (Spring)
   terminal-transaction-docker-service:
-#    container_name: terminal-transaction-docker-service
     build:
       context: ./TerminalTransactionVerificationService
     depends_on:
@@ -26,23 +25,26 @@ services:
       - igorbank-net
 
   # Web Transaction Service load balancer
-#  nginx-lb-web:
-#    image: nginx:latest
-#    depends_on:
-#      - web-transaction-docker-service
-#    ports:
-#      - "80:80" # port 81 for terminal transactions and port 80 for web transactions
-#    volumes:
-#      - ./WebTransactionService/nginx.conf:/etc/nginx/nginx.conf:ro
-#    networks:
-#      - igorbank-net
+  nginx-lb-web:
+    container_name: nginx-lb-web
+    image: nginx:latest
+    depends_on:
+      - web-transaction-docker-service
+    ports:
+      - "80:80" # port 81 for terminal transactions and port 80 for web transactions
+    volumes:
+      - ./WebTransactionService/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - igorbank-net
 
   # Web Transaction Service (Spring)
-#  web-transaction-docker-service:
-#    depends_on:
-#      - postgres-slave
-#    networks:
-#      - igorbank-net
+  web-transaction-docker-service:
+    build:
+      context: ./WebTransactionService
+    depends_on:
+      - postgres-slave
+    networks:
+      - igorbank-net
 
   # PostGresDB Located in Greenland
   postgres-master:
@@ -90,16 +92,16 @@ services:
     networks:
       - igorbank-net
 
-  retriever-service:
-    container_name: retriever-service
-    build:
-      context: ./retriever-service
-    ports:
-      - "8081:8080"
-    networks:
-      - igorbank-net
-    depends_on:
-      - postgres-master
+#  retriever-service:
+#    container_name: retriever-service
+#    build:
+#      context: ./retriever-service
+#    ports:
+#      - "8081:8080"
+#    networks:
+#      - igorbank-net
+#    depends_on:
+#      - postgres-master
 
   update-service:
     container_name: update-service

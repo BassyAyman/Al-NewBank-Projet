@@ -16,9 +16,10 @@ function compile_dir()   # $1 is the dir to get it
     cd ..
 }
 
-compile_dir "retriever-service"
+#compile_dir "retriever-service"
 compile_dir "update-service"
 compile_dir "TerminalTransactionVerificationService"
+compile_dir "WebTransactionService"
 
 echo "Starting Docker containers..."
 docker-compose up --build -d --scale terminal-transaction-docker-service="$1" --scale web-transaction-docker-service="$2"
