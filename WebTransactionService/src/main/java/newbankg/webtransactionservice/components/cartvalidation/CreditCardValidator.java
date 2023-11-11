@@ -26,10 +26,11 @@ public class CreditCardValidator implements ValidateCardValidation {
                 && algoCheck.validateCreditCardAlgoLuhn(creditCardNumber);
     }
 
-
     @Override
     public boolean isCardExpired(String expirationDate) {
-        LocalDate expiry = LocalDate.parse(expirationDate, DateTimeFormatter.ofPattern("MM/yy"));
-        return expiry.isBefore(LocalDate.now());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
+        YearMonth expiry = YearMonth.parse(expirationDate, formatter);
+        LocalDate lastDayOfMonth = expiry.atEndOfMonth();
+        return lastDayOfMonth.isBefore(LocalDate.now());
     }
 }
