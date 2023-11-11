@@ -3,6 +3,8 @@ package fr.igorbanque.updateservice.componets;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.igorbanque.updateservice.models.Transaction;
+import fr.igorbanque.updateservice.repositories.AccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +12,9 @@ import java.util.logging.Logger;
 
 @Component
 public class KafkaListeners {
+
+    @Autowired
+    public AccountRepository accountRepository;
 
     private static final Logger LOGGER = Logger.getLogger(KafkaListeners.class.getSimpleName());
 
@@ -25,7 +30,6 @@ public class KafkaListeners {
             return;
         }
         LOGGER.info("Transaction reçu avec succes:" + transactionObj.toString());
-        // TODO Store to master database
     }
 
 }

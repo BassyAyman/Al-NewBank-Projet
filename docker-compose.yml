@@ -71,6 +71,7 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    restart: always
     networks:
       - igorbank-net
 
@@ -162,10 +163,11 @@ services:
       context: ./update-service
     ports:
       - "8082:8080"
+    depends_on:
+      - kafka
+    restart: always
     networks:
       - igorbank-net
-    depends_on:
-      - postgres-slave
 
 networks:
   igorbank-net:
