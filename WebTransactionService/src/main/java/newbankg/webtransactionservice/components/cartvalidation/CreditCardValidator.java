@@ -28,7 +28,7 @@ public class CreditCardValidator implements ValidateCardValidation {
         boolean isExpired = isCardExpired(cb.getCreditCartDateExpiration());
         boolean isNumberCoherent = binCheck.checkCreditCardNumberCoherence(creditCardNumber);
         boolean isValidAlgo = algoCheck.validateCreditCardAlgoLuhn(creditCardNumber);
-        
+
         LOGGER.debug("Validating credit card number: {}", creditCardNumber);
         LOGGER.debug("Is card expired: {}", isExpired);
         LOGGER.debug("Is BIN number coherent: {}", isNumberCoherent);
