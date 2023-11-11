@@ -1,14 +1,11 @@
 package newbankg.webtransactionservice.models;
 
-import lombok.Data;
+public record Transaction(
+        String clientFirstName,
+        String clientLastName,
+        int amountOfTransaction,
+        String clientCreditCardNumber,
+        String clientCreditCartDateExpiration,
+        String clientCVV) { }
 
-@Data
-public class Transaction {
 
-    private String clientFirstName;
-    private String clientLastName;
-    private int amountOfTransaction;
-    private String clientCreditCartDateExpiration;
-    private String clientCVV;
-
-}

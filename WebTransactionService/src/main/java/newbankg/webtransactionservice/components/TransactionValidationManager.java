@@ -52,14 +52,14 @@ public class TransactionValidationManager implements ITransactionValidator {
     public Transaction makeTransactionWithCardId(Transaction transaction) throws InvalidTransactionException {
         LOGGER.log(Level.INFO, "Proceeding to account validation");
 
-        CreditCard creditCard = creditCardRepository.findByCreditCardNumber(transaction.getClientCreditCardNumber());
+        CreditCard creditCard = creditCardRepository.findByCreditCardNumber(transaction.clientCreditCardNumber());
         if (null == creditCard || !validateCardValidation.validateCardInTransactionContext(creditCard)) {
             LOGGER.log(Level.INFO, "Card is not valid");
             throw new InvalidTransactionException("Card is not valid");
         }
 
-        Account account = accountRepository.findbyClientCustomerIdentifier(creditCard.getClientInformation().getCustomerIdentifier());
-        if (null == account || !accountValidator.checkAccount(account, transaction.getAmountOfTransaction())) {
+        Account account = accountRepository.findById(creditCard.getClientInformation().getCustomerIdentifier());
+        if (null == account || !accountValidator.checkAccount(account, transaction.amountOfTransaction())) {
             LOGGER.log(Level.INFO, "Account is not valid");
             throw new InvalidTransactionException("Account is not valid");
         }
