@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
 @Component
@@ -39,9 +40,10 @@ public class CreditCardValidator implements ValidateCardValidation {
 
     @Override
     public boolean isCardExpired(String expirationDate) {
-        LocalDate expiry = LocalDate.parse(expirationDate, DateTimeFormatter.ofPattern("MM/yy"));
-        boolean isExpired = expiry.isBefore(LocalDate.now());
-        LOGGER.debug("Checking if card is expired. Expiration Date: {}, Is Expired: {}", expirationDate, isExpired);
-        return isExpired;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
+        YearMonth expiry = YearMonth.parse(expirationDate, formatter);
+        LocalDate lastDayOfMonth = expiry.atEndOfMonth();
+        LOGGER.debug("Checking if card is expired. Expiration Date: {}, Is Expired: {}", expirationDate, lastDayOfMonth.isBefore(LocalDate.now()));
+        return lastDayOfMonth.isBefore(LocalDate.now());
     }
 }
