@@ -16,6 +16,7 @@ COPY --chown=$APPLICATION_USER:root target/$SERVICE_NAME.jar /app/$SERVICE_NAME.
 # Set working directory
 WORKDIR /app
 
+
 EXPOSE 8081
 
 # Run the jar

@@ -11,12 +11,10 @@ function compile_dir()   # $1 is the dir to get it
 {
   echo "Preparing $1..."
     cd "$1"
-    # retriever-service
     mvn clean package -DskipTests
     cd ..
 }
 
-#compile_dir "retriever-service"
 compile_dir "update-service"
 compile_dir "TerminalTransactionVerificationService"
 compile_dir "WebTransactionService"

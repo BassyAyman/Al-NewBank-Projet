@@ -1,7 +1,10 @@
 #!/bin/bash
 # create docker image
 
-# Compiling and buildpacking docker image
-echo "Compiling terminal-transaction-service"
-mvn clean spring-boot:build-image -Dspring-boot.build-image.imageName="terminal-transaction-service_image" -DskipTests
+# Build docker image
+echo "Building terminal-transaction-service image"
+#mvn clean spring-boot:build-image -Dspring-boot.build-image.imageName="terminal-transaction-service_image" -DskipTests
+
+docker build -t terminal-transaction-service .
+
 echo "Done"

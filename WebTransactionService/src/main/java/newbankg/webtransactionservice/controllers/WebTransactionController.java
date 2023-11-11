@@ -6,6 +6,7 @@ import newbankg.webtransactionservice.models.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,18 +25,21 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         @Autowired
         ITransactionValidator transactionValidator;
 
+        @Autowired
+        private KafkaTemplate<String, Transaction> stringKafkaTemplate;
+
         @PostMapping(path = "payOnline", consumes = APPLICATION_JSON_VALUE)
         public ResponseEntity<String> payOnline(@RequestBody Transaction transaction) {
             try {
                 Transaction validatedTransaction = transactionValidator.makeTransactionWithCardId(transaction);
-                // TODO: send transaction somewhere...
+                stringKafkaTemplate.send("transactionWrite", validatedTransaction);
                 return ResponseEntity.ok("Transaction successful");
             } catch (InvalidTransactionException e) {
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
             } catch (NoSuchElementException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error" + e);
             }
         }
 

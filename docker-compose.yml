@@ -17,6 +17,7 @@ services:
 
   # Terminal Transaction Service (Spring)
   terminal-transaction-docker-service:
+    image: "terminal-transaction-service"
     build:
       context: ./TerminalTransactionVerificationService
     depends_on:
@@ -40,11 +41,36 @@ services:
 
   # Web Transaction Service (Spring)
   web-transaction-docker-service:
+    image: "web-transaction-service"
+    ports:
+      - "8085:8080"
     build:
       context: ./WebTransactionService
     depends_on:
       postgres-slave:
         condition: service_healthy
+    networks:
+      - igorbank-net
+
+  # Kafka setup
+  zookeeper:
+    image: zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - igorbank-net
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     networks:
       - igorbank-net
 
@@ -129,16 +155,6 @@ services:
       timeout: 30s
       retries: 10
 
-#  retriever-service:
-#    container_name: retriever-service
-#    build:
-#      context: ./retriever-service
-#    ports:
-#      - "8081:8080"
-#    networks:
-#      - igorbank-net
-#    depends_on:
-#      - postgres-master
 
   update-service:
     container_name: update-service
