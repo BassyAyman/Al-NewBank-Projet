@@ -1,68 +1,48 @@
-package newbankg.webtransactionservice.components;
+package newbankg.webtransactionservice.components.cartvalidation;
 
-import newbankg.webtransactionservice.InvalidTransactionException;
-import newbankg.webtransactionservice.interfaces.ITransactionValidator;
-import newbankg.webtransactionservice.interfaces.accountbusiness.IAccountValidator;
+import newbankg.webtransactionservice.interfaces.cartbusiness.AlgoCheck;
+import newbankg.webtransactionservice.interfaces.cartbusiness.BINCheck;
 import newbankg.webtransactionservice.interfaces.cartbusiness.ValidateCardValidation;
-import newbankg.webtransactionservice.models.Account;
 import newbankg.webtransactionservice.models.CreditCard;
-import newbankg.webtransactionservice.models.Transaction;
-import newbankg.webtransactionservice.repositories.AccountRepository;
-import newbankg.webtransactionservice.repositories.CreditCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.logging.Level;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Logger;
 
 @Component
-public class TransactionValidationManager implements ITransactionValidator {
+public class CreditCardValidator implements ValidateCardValidation {
 
-    private static final Logger LOGGER = Logger.getLogger(TransactionValidationManager.class.getSimpleName());
-
-    @Autowired
-    IAccountValidator accountValidator;
-    @Autowired
-    ValidateCardValidation validateCardValidation;
+    private static final Logger LOGGER = Logger.getLogger(CreditCardValidator.class.getName());
 
     @Autowired
-    AccountRepository accountRepository;
-
+    BINCheck binCheck;
     @Autowired
-    CreditCardRepository creditCardRepository;
+    AlgoCheck algoCheck;
 
-    /**
-     * Check if the transaction is valid, if not throw an exception.
-     * Account is found by the card number. and the card is found by the transaction.
-     * <p>
-     * Transaction is valid if:
-     * - the card is valid:
-     * - the card is not expired
-     * - the card number is coherent
-     * - the card number is valid according to the Luhn algorithm
-     * - the account is valid:
-     * - the account has enough money
-     * - the account has enough limit
-     * - the account is not blocked, expired...closed.. maybe???
-     *
-     * @param transaction Transaction to check
-     * @throws InvalidTransactionException if the transaction is not valid
-     */
     @Override
-    public Transaction makeTransactionWithCardId(Transaction transaction) throws InvalidTransactionException {
-        LOGGER.log(Level.INFO, "Proceeding to account validation");
+    public boolean validateCardInTransactionContext(CreditCard cb) {
+        String creditCardNumber = cb.getCreditCardNumber();
+        LOGGER.info("Validating credit card number: " + creditCardNumber);
 
-        CreditCard creditCard = creditCardRepository.findByCreditCardNumber(transaction.clientCreditCardNumber());
-        if (null == creditCard || !validateCardValidation.validateCardInTransactionContext(creditCard)) {
-            LOGGER.log(Level.INFO, "Card is not valid");
-            throw new InvalidTransactionException("Card is not valid");
-        }
+        boolean isExpired = isCardExpired(cb.getCreditCartDateExpiration());
+        LOGGER.info("Card expiration status: " + (isExpired ? "Expired" : "Valid"));
 
-        Account account = accountRepository.findById(creditCard.getClientInformation().getCustomerIdentifier());
-        if (null == account || !accountValidator.checkAccount(account, transaction.amountOfTransaction())) {
-            LOGGER.log(Level.INFO, "Account is not valid");
-            throw new InvalidTransactionException("Account is not valid");
-        }
-        return transaction;
+        boolean isNumberCoherent = binCheck.checkCreditCardNumberCoherence(creditCardNumber);
+        LOGGER.info("BIN number coherence status: " + (isNumberCoherent ? "Coherent" : "Incoherent"));
+
+        boolean isValidAlgo = algoCheck.validateCreditCardAlgoLuhn(creditCardNumber);
+        LOGGER.info("Luhn algorithm validation status: " + (isValidAlgo ? "Passed" : "Failed"));
+
+        return !isExpired && isNumberCoherent && isValidAlgo;
+    }
+
+    @Override
+    public boolean isCardExpired(String expirationDate) {
+        LocalDate expiry = LocalDate.parse(expirationDate, DateTimeFormatter.ofPattern("MM/yy"));
+        boolean isExpired = expiry.isBefore(LocalDate.now());
+        LOGGER.info("Checking card expiration. Expiration Date: " + expirationDate + ", Is expired: " + isExpired);
+        return isExpired;
     }
 }
