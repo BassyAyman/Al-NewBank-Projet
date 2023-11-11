@@ -29,8 +29,8 @@ public class CreditCardValidator implements ValidateCardValidation {
         boolean isExpired = isCardExpired(cb.getCreditCartDateExpiration());
         boolean isNumberCoherent = binCheck.checkCreditCardNumberCoherence(creditCardNumber);
         boolean isValidAlgo = algoCheck.validateCreditCardAlgoLuhn(creditCardNumber);
-        Arrays.asList("Validating credit card number: " + creditCardNumber, "Is card expired: " + isExpired, "Is BIN number coherent: " + isNumberCoherent, "Does card number pass Luhn algorithm check: " + isValidAlgo)//
-                .forEach(LOGGER::info);
+        //Arrays.asList("Validating credit card number: " + creditCardNumber, "Is card expired: " + isExpired, "Is BIN number coherent: " + isNumberCoherent, "Does card number pass Luhn algorithm check: " + isValidAlgo)//
+        //        .forEach(LOGGER::info);
         return !isExpired && isNumberCoherent && isValidAlgo;
     }
 
@@ -39,7 +39,7 @@ public class CreditCardValidator implements ValidateCardValidation {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
         YearMonth expiry = YearMonth.parse(expirationDate, formatter);
         LocalDate lastDayOfMonth = expiry.atEndOfMonth();
-        LOGGER.info("Checking if card is expired. Expiration Date: " + lastDayOfMonth + " Today: " + LocalDate.now());
+        //LOGGER.info("Checking if card is expired. Expiration Date: " + lastDayOfMonth + " Today: " + LocalDate.now());
         return lastDayOfMonth.isBefore(LocalDate.now());
     }
 }
