@@ -42,10 +42,12 @@ public class Populate {
         CreditCard creditCard = new CreditCard();
         creditCard.setId(1L);
         creditCard.setClientInformation(client);
-        creditCard.setCreditCardNumber("1234567891234567");
+        creditCard.setCreditCardNumber("4532759734545858");
         creditCard.setCreditCartDateExpiration("12/25");
         creditCard.setCvv("123");
         creditCardRepository.save(creditCard);
+
+        populate(2500);
 
 //        Transaction transaction = new Transaction();
 //        transaction.setClientFirstName("John");
@@ -54,5 +56,31 @@ public class Populate {
 //        transaction.setClientCreditCardNumber("1234567891234567");
 //        transaction.setClientCreditCartDateExpiration("12/25");
 //        transaction.setClientCVV("123");
+    }
+
+    public void populate(int numberOfClients) {
+        for (int i = 2; i < numberOfClients+2; i++) {
+            Client client = new Client();
+            client.setCustomerIdentifier((long) i);
+            client.setFirstName("John");
+            client.setLastName("Doe");
+            clientRepository.save(client);
+
+            Account account = new Account();
+            account.setId((long) i);
+            account.setClientAccount(client);
+            account.setAmountMoney(1000);
+            account.setInDebitAmount(0);
+            account.setAccountLimit(1000);
+            accountRepository.save(account);
+
+            CreditCard creditCard = new CreditCard();
+            creditCard.setId((long) i);
+            creditCard.setClientInformation(client);
+            creditCard.setCreditCardNumber("111111111111" + String.format("%04d", i));
+            creditCard.setCreditCartDateExpiration("12/25");
+            creditCard.setCvv("123");
+            creditCardRepository.save(creditCard);
+        }
     }
 }
