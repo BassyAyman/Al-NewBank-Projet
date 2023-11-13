@@ -1,6 +1,5 @@
 package newbankg.webtransactionservice.components.accountvalidation;
 
-import newbankg.webtransactionservice.interfaces.accountbusiness.IAccountInformation;
 import newbankg.webtransactionservice.interfaces.accountbusiness.IAccountValidator;
 import newbankg.webtransactionservice.interfaces.accountbusiness.IBalanceChecker;
 import newbankg.webtransactionservice.interfaces.accountbusiness.ILimitChecker;
@@ -10,9 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AccountValidator implements IAccountValidator {
-
-    @Autowired
-    IAccountInformation accountInformation;
 
     @Autowired
     ILimitChecker limitChecker;
