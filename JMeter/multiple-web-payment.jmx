@@ -72,7 +72,7 @@
             <stringProp name="filename">D:/documents/S9/architecture-logicielle/al-newbank-23-24-al-23-24-g-v7/credit-cards.csv</stringProp>
             <stringProp name="fileEncoding"></stringProp>
             <stringProp name="variableNames">card</stringProp>
-            <boolProp name="ignoreFirstLine">true</boolProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
             <stringProp name="delimiter">,</stringProp>
             <boolProp name="quotedData">false</boolProp>
             <boolProp name="recycle">true</boolProp>
