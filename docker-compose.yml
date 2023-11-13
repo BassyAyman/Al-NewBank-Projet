@@ -165,6 +165,7 @@ services:
       - "8082:8080"
     depends_on:
       - kafka
+      - postgres-master
     restart: always
     networks:
       - igorbank-net
