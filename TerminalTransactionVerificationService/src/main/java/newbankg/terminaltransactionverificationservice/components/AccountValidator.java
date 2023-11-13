@@ -28,6 +28,6 @@ public class AccountValidator implements IAccountValidator {
         // Check spend limit
         return limitChecker.checkLimit(amountOfTransaction, customer.getAccountLimit()) &&
                 // Check balance
-                balanceChecker.isBalanceOk(amountOfTransaction, customer.getAmountMoney());
+                balanceChecker.isBalanceOk(amountOfTransaction, customer);
     }
 }
