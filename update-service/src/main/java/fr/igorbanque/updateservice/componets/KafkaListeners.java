@@ -34,6 +34,7 @@ public class KafkaListeners {
             CreditCard clientCard = creditCardRepository.findCreditCardByCreditCardNumber(transactionObj.getCreditCardNumber());
             Account clientAccount = accountRepository.findAccountByClientAccount(clientCard.getClientInformation());
             clientAccount.setAmountMoney(clientAccount.getAmountMoney() - transactionObj.getAmountOfTransaction());
+            accountRepository.save(clientAccount); // Client account will be updated in db
         } catch (Exception e){
             LOGGER.info("[ERROR] something went wrong : " + e.getMessage());
             return;
