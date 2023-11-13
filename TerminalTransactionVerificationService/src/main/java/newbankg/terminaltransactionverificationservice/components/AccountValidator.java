@@ -22,12 +22,12 @@ public class AccountValidator implements IAccountValidator {
 
 
     @Override
-    public boolean checkAccountWithId(long id) {
+    public boolean checkAccountWithId(long id, int amountOfTransaction) {
         // Searching for account data
         Account customer = accountInformation.getAccountFromCardId(id);
         // Check spend limit
-        return limitChecker.checkLimit(id) &&
+        return limitChecker.checkLimit(amountOfTransaction, customer.getAccountLimit()) &&
                 // Check balance
-                balanceChecker.isBalanceOk(customer);
+                balanceChecker.isBalanceOk(amountOfTransaction, customer.getAmountMoney());
     }
 }

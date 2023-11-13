@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 public class AccountRestrictions implements ILimitChecker {
 
     @Override
-    public boolean checkLimit(long id) {
-        return true;
+    public boolean checkLimit(long id, int accountBalance) {
+        return accountBalance > 0; // TODO: better logic with debt?
     }
 
 }

@@ -24,6 +24,6 @@ public class AccountValidator implements IAccountValidator {
     @Override
     public boolean checkAccount(Account account, int amountOfTransaction) {
         return limitChecker.checkLimit(amountOfTransaction, account.getAccountLimit())  //
-                && balanceChecker.isBalanceOk(amountOfTransaction, account.getAmountMoney());
+                && balanceChecker.isBalanceOk(amountOfTransaction, account);
     }
 }

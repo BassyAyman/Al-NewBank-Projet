@@ -11,7 +11,7 @@ public class TerminalTransactionService implements ITransactionValidator {
     IAccountValidator accountValidator;
 
     @Override
-    public boolean makeTransactionWithCardId(long cardId) {
-        return accountValidator.checkAccountWithId(cardId);
+    public boolean makeTransactionWithCardId(long cardId, int amountOfTransaction) {
+        return accountValidator.checkAccountWithId(cardId, amountOfTransaction);
     }
 }

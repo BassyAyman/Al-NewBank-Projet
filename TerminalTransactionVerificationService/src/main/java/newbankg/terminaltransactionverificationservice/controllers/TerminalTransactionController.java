@@ -35,7 +35,7 @@ public class TerminalTransactionController {
 
     @PostMapping(path = "/payOnline", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> processTransaction(@RequestBody Transaction transaction) {
-        if (null != transaction && terminalTransactionService.makeTransactionWithCardId(transaction.cardId())) {
+        if (null != transaction && terminalTransactionService.makeTransactionWithCardId(transaction.cardId(), transaction.amountOfTransaction())) {
             String response = sendTransactionToService(transaction);
             if (TRANSACTION_IS_VALID.equals(response)) { // null free
                 LOGGER.info(TRANSACTION_IS_VALID);
@@ -77,7 +77,7 @@ public class TerminalTransactionController {
     public ResponseEntity<String> addJohnDoe() {
         // LOGGER.info("Adding John Doe");
         try {
-            Account account = accountRepository.save(new Account("John", "Doe", 1));
+            Account account = accountRepository.save(new Account()); // TODO: fix this?
             LOGGER.info("Added John Doe");
             return ResponseEntity.ok("User added:%s".formatted(account.toString()));
         } catch (Exception e) {

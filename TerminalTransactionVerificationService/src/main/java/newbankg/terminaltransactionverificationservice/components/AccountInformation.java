@@ -9,7 +9,7 @@ public class AccountInformation implements IAccountInformation {
 
     @Override
     public Account getAccountFromCardId(long cardId) {
-        return new Account("Test", "ImOk", 12345678);
+        return new Account(); // TODO
     }
 
 }

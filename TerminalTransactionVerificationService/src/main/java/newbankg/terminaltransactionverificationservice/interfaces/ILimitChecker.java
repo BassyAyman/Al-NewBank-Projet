@@ -2,6 +2,6 @@ package newbankg.terminaltransactionverificationservice.interfaces;
 
 public interface ILimitChecker {
 
-    boolean checkLimit(long id);
+    boolean checkLimit(long id, int client);
 
 }
