@@ -1,6 +1,5 @@
 package newbankg.terminaltransactionverificationservice.components;
 
-import newbankg.terminaltransactionverificationservice.interfaces.IAccountInformation;
 import newbankg.terminaltransactionverificationservice.interfaces.IAccountValidator;
 import newbankg.terminaltransactionverificationservice.interfaces.IBalanceChecker;
 import newbankg.terminaltransactionverificationservice.interfaces.ILimitChecker;
@@ -12,9 +11,6 @@ import org.springframework.stereotype.Component;
 public class AccountValidator implements IAccountValidator {
 
     @Autowired
-    IAccountInformation accountInformation;
-
-    @Autowired
     ILimitChecker limitChecker;
 
     @Autowired
@@ -22,9 +18,7 @@ public class AccountValidator implements IAccountValidator {
 
 
     @Override
-    public boolean checkAccountWithId(long id, int amountOfTransaction) {
-        // Searching for account data
-        Account customer = accountInformation.getAccountFromCardId(id);
+    public boolean checkAccount(Account customer, int amountOfTransaction) {
         // Check spend limit
         return limitChecker.checkLimit(amountOfTransaction, customer.getAccountLimit()) &&
                 // Check balance

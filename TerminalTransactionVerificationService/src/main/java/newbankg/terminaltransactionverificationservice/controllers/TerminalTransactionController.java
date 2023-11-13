@@ -2,9 +2,11 @@ package newbankg.terminaltransactionverificationservice.controllers;
 
 import newbankg.terminaltransactionverificationservice.models.Account;
 import newbankg.terminaltransactionverificationservice.models.Client;
+import newbankg.terminaltransactionverificationservice.models.CreditCard;
 import newbankg.terminaltransactionverificationservice.models.Transaction;
 import newbankg.terminaltransactionverificationservice.repositories.AccountRepository;
 import newbankg.terminaltransactionverificationservice.repositories.ClientRepository;
+import newbankg.terminaltransactionverificationservice.repositories.CreditCardRepository;
 import newbankg.terminaltransactionverificationservice.services.TerminalTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +32,18 @@ public class TerminalTransactionController {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private CreditCardRepository creditCardRepository;
+
     private static final String TRANSACTION_IS_VALID = "Transaction is valid";
 
 
     @PostMapping(path = "/payOnline", consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<String> processTransaction(@RequestBody Transaction transaction) {
-        if (null != transaction && terminalTransactionService.makeTransactionWithCardId(transaction.cardId(), transaction.amountOfTransaction())) {
+        // id card -> client -> account
+        CreditCard cb = creditCardRepository.findByCreditCardNumber(transaction.cardNumber());
+        Account account = accountRepository.findById(cb.getClientInformation().getCustomerIdentifier());
+        if (terminalTransactionService.makeTransaction(account, transaction.amountOfTransaction())) {
             String response = sendTransactionToService(transaction);
             if (TRANSACTION_IS_VALID.equals(response)) { // null free
                 LOGGER.info(TRANSACTION_IS_VALID);
