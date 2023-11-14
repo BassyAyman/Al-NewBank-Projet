@@ -2,7 +2,8 @@
 
 set -f
 
-SERVICE="http://localhost:80/payOnline"
+TERMINAL="http://localhost:80/payOnline"
+WEB="http://localhost:81/payOnline"
 
 
 test_post() {
@@ -31,7 +32,7 @@ JSON_DATA='{
     "clientCreditCartDateExpiration": "12/24",
     "clientCVV": "123"
 }'
-test_post "$SERVICE" "$JSON_DATA" "Expected to do"
+test_post "$TERMINAL" "$JSON_DATA" "Transaction successful"
 
 echo "--------------------"
 echo "Wrong luhn algo"
@@ -43,7 +44,7 @@ JSON_DATA='{
     "clientCreditCartDateExpiration": "12/24",
     "clientCVV": "123"
 }'
-test_post "$SERVICE" "$JSON_DATA" "Expected to do"
+test_post "$TERMINAL" "$JSON_DATA" "Internal Server Error"
 
 echo "--------------------"
 echo "Card expired"
@@ -55,7 +56,7 @@ JSON_DATA='{
     "clientCreditCartDateExpiration": "10/23",
     "clientCVV": "123"
 }'
-test_post "$SERVICE" "$JSON_DATA" "Expected to do"
+test_post "$TERMINAL" "$JSON_DATA" "Internal Server Error"
 
 
 echo "--------------------"
@@ -68,8 +69,16 @@ JSON_DATA='{
     "clientCreditCartDateExpiration": "10/23",
     "clientCVV": "123"
 }'
-test_post "$SERVICE" "$JSON_DATA" "Expected to do"
+test_post "$TERMINAL" "$JSON_DATA" "Internal Server Error"
 
+echo "--------------------"
+echo "Web transaction valid"
+JSON_DATA='{
+    "id": "transaction_id",
+    "cardNumber": "9687132552572424",
+    "amountOfTransaction": 100
+}'
+test_post "$TERMINAL" "$JSON_DATA" "Transaction successful"
 
 ## if needed
 test_get() {
