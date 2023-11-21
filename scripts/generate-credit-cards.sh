@@ -81,7 +81,7 @@ for (( i=0; i<num_cards; i++ )); do
         # card_details=$(generate_valid_card)
         card_number=$(generate_valid_card)
     else
-        # card_length=$((RANDOM % 7 + 13)) # Random card length between 13 and 19
+        card_length=$((RANDOM % 7 + 13)) # Random card length between 13 and 19
         card_number=$(generate_card_number $card_length)
         # cvv=$((RANDOM % 1000))
         # expiration_month=$(printf "%02d" $((RANDOM % 12 + 1)))
