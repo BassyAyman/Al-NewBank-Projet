@@ -1,0 +1,83 @@
+name: Check Build and Test
+
+# on push or pull request to all branches excluding master
+on:
+  push:
+    branches-ignore:
+      - master
+  pull_request:
+    branches-ignore:
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        instances: [ [ 1, 1 ], [ 4, 4 ] ]
+      fail-fast: false
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        run: |
+          sudo service docker start
+
+      - name: Setup adr?
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+          sudo apt-get install -y python3-pip
+          sudo pip3 install adr-tools
+
+      - name: Make scripts executable
+        run: |
+          chmod +x ./prepare-all.sh
+          chmod +x ./scripts/test.sh
+          chmod +x ./scripts/dump-master-database.sh
+
+      - name: Build and Run Services
+        run: ./prepare-all.sh ${{ matrix.instances[0] }} ${{ matrix.instances[1] }}
+
+      - name: Wait for Services to Start
+        run: ./scripts/wait-for-services.sh
+
+      - name: Dump database
+        run: ./scripts/dump-master-database.sh
+
+      - name: Check Database Dump
+        run: |
+          echo "-> Checking database dump"
+          if [ ! -s ../sql/test_data.sql ]; then
+            echo "The file test_data.sql is empty, aborting..."
+            exit 1
+          fi
+          echo "-> Database dump successful"
+
+      - name: Wait for Services Health
+        run: |
+          function wait_on_health() {
+              until [ "$(curl --silent "$1"/actuator/health | grep UP -c)" == 1 ]; do
+                  echo "Service $2 is not connected yet at $1"
+                  sleep 3
+              done
+              echo "Service $2 is up and running at $1"
+          }
+          echo "Waiting for services to start..."
+          wait_on_health "http://localhost:80/actuator/health" "Terminal Transaction Service"
+          echo "Terminal Transaction Service is up and running at http://localhost:80/actuator/health"
+          wait_on_health "http://localhost:81/actuator/health" "Web Transaction Service"
+          echo "Web Transaction Service is up and running at http://localhost:81/actuator/health"
+
+
+
+      - name: Run Tests
+        run: ./scripts/test.sh
+
+      - name: Cleanup Docker Environment
+        if: always()
+        run: |
+          docker-compose down -v
+          docker system prune -af
