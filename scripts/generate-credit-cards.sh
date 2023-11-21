@@ -1,159 +1,90 @@
 #!/bin/bash
 
-# generate credit cards on csv file
-# usage: ./generate-credit-cards.sh <number-of-credit-cards>
-
-# for the advanced logic to make valid and unvalid credit cards
-# usage: ./generate-credit-cards.sh <number-of-credit-cards> <percentage-of-okay-cards>
+# Generates credit cards and outputs to a CSV file
+# Usage: ./generate-credit-cards.sh <number-of-credit-cards> [<percentage-of-okay-cards>]
 
 set -e
 
-generate_visa_prefix() {
-    # Visa cards start with a 4.
-    echo "4$(($RANDOM % 10))"
-}
-
+# Define card prefixes
+generate_visa_prefix() { echo "4$(($RANDOM % 10))"; }
 generate_mastercard_prefix() {
-    # MasterCard start with numbers from 51 to 55 or 2221 to 2720.
     local prefixes=(51 52 53 54 55 2221 2222 2223 2224 2225 2226 2227 2228 2229 223 224 225 226 227 228 229 23 24 25 26 27)
-    local idx=$(($RANDOM % ${#prefixes[@]}))
-    echo "${prefixes[$idx]}"
+    echo "${prefixes[$(($RANDOM % ${#prefixes[@]}))]}"
 }
-
-generate_amex_prefix() {
-    # AmEx cards start with 34 or 37.
-    local prefixes=(34 37)
-    local idx=$(($RANDOM % 2))
-    echo "${prefixes[$idx]}"
-}
-
+generate_amex_prefix() { echo $((RANDOM % 2 == 0 ? 34 : 37)); }
 generate_random_prefix() {
     local prefixes=( $(generate_visa_prefix) $(generate_mastercard_prefix) $(generate_amex_prefix) )
-    local idx=$(($RANDOM % ${#prefixes[@]}))
-    echo "${prefixes[$idx]}"
+    echo "${prefixes[$(($RANDOM % ${#prefixes[@]}))]}"
 }
 
-generate_card_number() {
-    local PREFIX=$(generate_random_prefix)
-    local LENGTH=$1
-    local NUM_DIGITS=$((LENGTH - ${#PREFIX}))
-
-    for ((i=0; i<NUM_DIGITS; i++)); do
-        local DIGIT=$((RANDOM % 10))
-        PREFIX="${PREFIX}${DIGIT}"
-    done
-
-    local CHECKSUM=$(calculate_luhn_checksum "$PREFIX")
-    echo "${PREFIX}${CHECKSUM}"
-}
-
+# Luhn algorithm to calculate the checksum
 calculate_luhn_checksum() {
-    NUM=$1
-    SUM=0
-    ALT=0
-    LEN=${#NUM}
-
-    for ((i=$LEN-1; i>=0; i--)); do
-        DIGIT=${NUM:i:1}
-        if [ $ALT -eq 1 ]; then
-            DIGIT=$((DIGIT * 2))
-            if [ $DIGIT -gt 9 ]; then
-                DIGIT=$((DIGIT - 9))
-            fi
-        fi
-        SUM=$((SUM + DIGIT))
-        ALT=$((!ALT))
+    local num=$1 sum=0 alt=0
+    for (( i=${#num}-1; i>=0; i-- )); do
+        local digit=${num:i:1}
+        ((alt ^= 1)) && ((digit *= 2)) && ((digit -= digit > 9 ? 9 : 0))
+        ((sum += digit))
     done
-
-    CHECKSUM=$((10 - SUM % 10))
-    [ $CHECKSUM -eq 10 ] && CHECKSUM=0
-    echo $CHECKSUM
+    echo $(( (10 - sum % 10) % 10 ))
 }
 
+# Generates a credit card number
+generate_card_number() {
+    local prefix;
+    prefix=$(generate_random_prefix) length=$1
+    local card_number="${prefix}"
 
-if [ $# -lt 1 ]; then
-    echo "Usage: $0 <number-of-credit-cards>"
-    exit 1
-fi
+    for (( i=${#prefix}; i<length-1; i++ )); do
+        card_number+=$((RANDOM % 10))
+    done
+    card_number+=$(calculate_luhn_checksum "$card_number")
 
-NUM_CARDS=$1
+    echo "$card_number"
+}
 
-if [ -f credit-cards.csv ]; then
-    echo "Removing old credit-cards.csv file..."
-    rm credit-cards.csv
-fi
-
-echo "Generating $1 credit cards... into csv from bash"
-for ((i=0; i<NUM_CARDS; i++)); do
-    CARD_LENGTH=$((RANDOM % 7 + 13)) # Random card length between 13 and 19
-    CARD_NUMBER=$(generate_card_number $CARD_LENGTH)
-    CARD_CVV=$((RANDOM % 1000))
-    CARD_EXPIRATION_MONTH=$(printf "%02d" $((RANDOM % 12 + 1)))
-    CARD_EXPIRATION_YEAR=$((RANDOM % 10 + $(date +"%Y")))
-    echo "$CARD_NUMBER,$CARD_CVV,$CARD_EXPIRATION_MONTH/$CARD_EXPIRATION_YEAR" >> credit-cards.csv
-done
-
-# advanced logic to make valid and unvalid credit cards
-# usage: ./generate-credit-cards.sh <number-of-credit-cards> <percentage-of-okay-cards>
-
+# Check if the given year is current or future
 is_current_or_future_year() {
-    local year;
-    year=$1
-    local current_year;
-    current_year=$(date +"%Y")
-    if [ "$year" -ge "$current_year" ]; then
-        return 0
-    else
-        return 1
-    fi
+    (( $1 >= $(date +"%Y") ))
 }
 
-generate_okay_card() {
-    local LENGTH=16  # Standard length for "okay" cards
-    local PREFIX;
-    PREFIX=$(generate_random_prefix)
-    local NUM_DIGITS=$((LENGTH - ${#PREFIX} - 1))
-    local CARD_NUMBER_PART=""
+# Generate a valid credit card
+generate_valid_card() {
+    local length=16 # Standard length for valid cards
+    local card_number;
+    card_number=$(generate_card_number $length)
+    local cvv=$((RANDOM % 900 + 100)) # 3-digit CVV
+    local expiration_month;
+    expiration_month=$(printf "%02d" $((RANDOM % 12 + 1)))
+    local expiration_year=$((RANDOM % 5 + $(date +"%Y"))) # Within next 5 years
 
-    for ((i=0; i<NUM_DIGITS; i++)); do
-        CARD_NUMBER_PART="${CARD_NUMBER_PART}$((RANDOM % 10))"
-    done
-
-    local CARD_NUMBER="${PREFIX}${CARD_NUMBER_PART}"
-    local CHECKSUM;
-    CHECKSUM=$(calculate_luhn_checksum "$CARD_NUMBER")
-    CARD_NUMBER="${CARD_NUMBER}${CHECKSUM}"
-
-    local CARD_CVV=$((RANDOM % 900 + 100))  # CVV of 3 digits
-    local CARD_EXPIRATION_MONTH;
-    CARD_EXPIRATION_MONTH=$(printf "%02d" $((RANDOM % 12 + 1)))
-    local CARD_EXPIRATION_YEAR=$((RANDOM % 5 + $(date +"%Y")))  # Within next 5 years
-
-    echo "$CARD_NUMBER,$CARD_CVV,$CARD_EXPIRATION_MONTH/$CARD_EXPIRATION_YEAR"
+    echo "$card_number,$cvv,$expiration_month/$expiration_year"
 }
 
-if [ $# -gt 3 ]; then
-    echo "Usage: $0 <number-of-credit-cards> <percentage-of-okay-cards>"
+# Main script logic
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+    echo "Usage: $0 <number-of-credit-cards> [<percentage-of-okay-cards>]"
     exit 1
 fi
 
-NUM_CARDS=$1
-PERCENT_OKAY=$2
+num_cards=$1
+percent_okay=${2:-100} # Default to 100% okay cards
 
+echo "Generating $num_cards credit cards with $percent_okay% valid... into csv from bash"
 
-echo "Generating $1 credit cards (with $2% okay cards)... into csv from bash"
-for ((i=0; i<NUM_CARDS; i++)); do
-    if [ $(($RANDOM % 100)) -lt $PERCENT_OKAY ]; then
-        # Generate an okay card
-        CARD_DETAILS=$(generate_okay_card)
+# Remove old file if exists
+[ -f credit-cards.csv ] && rm credit-cards.csv
+
+# Generate cards
+for (( i=0; i<num_cards; i++ )); do
+    if [ $((RANDOM % 100)) -lt "$percent_okay" ]; then
+        card_details=$(generate_valid_card)
     else
-        # Generate a random card
-        CARD_LENGTH=$((RANDOM % 7 + 13)) # Random card length between 13 and 19
-        CARD_NUMBER=$(generate_card_number $CARD_LENGTH)
-        CARD_CVV=$((RANDOM % 1000))
-        CARD_EXPIRATION_MONTH=$(printf "%02d" $((RANDOM % 12 + 1)))
-        CARD_EXPIRATION_YEAR=$((RANDOM % 21 + 2000)) # Random year between 2000 and 2020
-        CARD_DETAILS="$CARD_NUMBER,$CARD_CVV,$CARD_EXPIRATION_MONTH/$CARD_EXPIRATION_YEAR"
+        card_length=$((RANDOM % 7 + 13)) # Random card length between 13 and 19
+        card_number=$(generate_card_number $card_length)
+        cvv=$((RANDOM % 1000))
+        expiration_month=$(printf "%02d" $((RANDOM % 12 + 1)))
+        expiration_year=$((RANDOM % 21 + 2000)) # Random year between 2000 and 2020
+        card_details="$card_number,$cvv,$expiration_month/$expiration_year"
     fi
-    echo "$CARD_DETAILS" >> credit-cards.csv
+    echo "$card_details" >> credit-cards.csv
 done
