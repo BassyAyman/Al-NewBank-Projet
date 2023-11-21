@@ -47,6 +47,20 @@ jobs:
       - name: Build and Run Services
         run: ./prepareAll.sh ${{ matrix.instances[0] }} ${{ matrix.instances[1] }} --non-interactive
 
+      - name: DEBUG
+        run: |
+          echo "docker ps"
+          docker-compose ps
+          echo "docker logs"
+          docker-compose logs
+          echo "docker network ls"
+          docker network ls
+          echo "docker network inspect"
+          docker network inspect
+          echo "docker logs nginx-lb-web"
+          docker logs nginx-lb-web
+      
+
       - name: Wait for Services Health
         run: |
           function wait_on_health() {
