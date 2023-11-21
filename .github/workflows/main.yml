@@ -40,7 +40,7 @@ jobs:
 
       - name: Make scripts executable
         run: |
-          chmod +x ./prepare-all.sh
+          chmod +x ./prepareAll.sh
           chmod +x ./scripts/test.sh
           chmod +x ./scripts/dump-master-database.sh
 
