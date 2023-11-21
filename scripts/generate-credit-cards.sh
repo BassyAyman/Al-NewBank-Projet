@@ -57,7 +57,8 @@ generate_valid_card() {
     expiration_month=$(printf "%02d" $((RANDOM % 12 + 1)))
     local expiration_year=$((RANDOM % 5 + $(date +"%Y"))) # Within next 5 years
 
-    echo "$card_number,$cvv,$expiration_month/$expiration_year"
+    # echo "$card_number,$cvv,$expiration_month/$expiration_year"
+    echo "$card_number"
 }
 
 # Main script logic
@@ -77,14 +78,16 @@ echo "Generating $num_cards credit cards with $percent_okay% valid... into csv f
 # Generate cards
 for (( i=0; i<num_cards; i++ )); do
     if [ $((RANDOM % 100)) -lt "$percent_okay" ]; then
-        card_details=$(generate_valid_card)
+        # card_details=$(generate_valid_card)
+        card_number=$(generate_valid_card)
     else
-        card_length=$((RANDOM % 7 + 13)) # Random card length between 13 and 19
+        # card_length=$((RANDOM % 7 + 13)) # Random card length between 13 and 19
         card_number=$(generate_card_number $card_length)
-        cvv=$((RANDOM % 1000))
-        expiration_month=$(printf "%02d" $((RANDOM % 12 + 1)))
-        expiration_year=$((RANDOM % 21 + 2000)) # Random year between 2000 and 2020
-        card_details="$card_number,$cvv,$expiration_month/$expiration_year"
+        # cvv=$((RANDOM % 1000))
+        # expiration_month=$(printf "%02d" $((RANDOM % 12 + 1)))
+        # expiration_year=$((RANDOM % 21 + 2000)) # Random year between 2000 and 2020
+        # card_details="$card_number,$cvv,$expiration_month/$expiration_year"
     fi
-    echo "$card_details" >> credit-cards.csv
+    # echo "$card_details" >> credit-cards.csv
+    echo "$card_number" >> credit-cards.csv
 done
