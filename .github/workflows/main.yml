@@ -32,6 +32,17 @@ jobs:
         run: |
           sudo service docker start
 
+      - name: Docker cleanup (if needed)
+        run: |
+          if [ -n "$(docker ps -aq)" ]; then
+            echo "Cleaning up docker"
+            docker stop $(docker ps -aq)
+            printf "%s docker containers stopped\n" $(docker ps -aq | wc -l)
+            docker rm $(docker ps -aq)
+          else
+            echo "No docker containers to clean up"
+          fi
+
       - name: Setup adr?
         run: |
           sudo apt-get update
@@ -43,6 +54,7 @@ jobs:
           chmod +x ./prepareAll.sh
           chmod +x ./scripts/test.sh
           chmod +x ./scripts/dump-master-database.sh
+          chmod +x ./scripts/generate-credit-cards.sh
 
       - name: Build and Run Services
         run: ./prepareAll.sh ${{ matrix.instances[0] }} ${{ matrix.instances[1] }} --non-interactive
