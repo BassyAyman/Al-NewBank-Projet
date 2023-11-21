@@ -26,9 +26,9 @@ sleep 5
 # Configure PostgreSQL and restart containers
 echo "Setting up PostgreSQL..."
 # if script is run with parameter "non-interactive"
-AN_USER_ALREADY_EXISTS=$(docker exec postgres-master psql -U postgres -tAc "SELECT reading_user FROM clientinfo_db WHERE PASSWORD='reading_pass'")
-if [ "$AN_USER_ALREADY_EXISTS" = "reading_user" ]; then
-    echo "Database already exists"
+AN_USER_ALREADY_EXISTS=$(docker exec postgres-master psql -U postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='reading_user'")
+if [ "$AN_USER_ALREADY_EXISTS" = "1" ]; then
+    echo "User reading_user already exists"
 else
     if [ "$3" = "--non-interactive" ]; then
       docker exec postgres-master psql -U postgres -d clientinfo_db -c "CREATE USER reading_user WITH PASSWORD 'reading_pass';"
