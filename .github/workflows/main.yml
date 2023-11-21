@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: windows-latest, ubuntu-latest #, macos-latest
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         instances: [ [ 1, 1 ] ] # [ [ 1, 1 ], [ 4, 4 ] ]
