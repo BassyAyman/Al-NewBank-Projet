@@ -2,7 +2,7 @@
 
 set -e
 
-if [ $# -ne 2 ]; then
+if [ $# -lt 2 ]; then
     echo "Usage: $0 <number-of-instances of terminal transaction service> <number-of-instances of web transaction service>"
     exit 1
 fi
