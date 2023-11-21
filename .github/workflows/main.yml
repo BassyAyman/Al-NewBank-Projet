@@ -45,10 +45,7 @@ jobs:
           chmod +x ./scripts/dump-master-database.sh
 
       - name: Build and Run Services
-        run: ./prepare-all.sh ${{ matrix.instances[0] }} ${{ matrix.instances[1] }}
-
-      - name: Wait for Services to Start
-        run: ./scripts/wait-for-services.sh
+        run: ./prepareAll.sh ${{ matrix.instances[0] }} ${{ matrix.instances[1] }}
 
       - name: Dump database
         run: ./scripts/dump-master-database.sh
