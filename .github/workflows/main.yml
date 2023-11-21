@@ -55,15 +55,6 @@ jobs:
           docker-compose logs
           echo "docker network ls"
           docker network ls
-          echo "docker network inspect"
-          docker network inspect
-          echo "docker logs nginx-lb-web"
-          docker logs nginx-lb-web
-      
-
-
-
-
 
       - name: Run Tests
         run: ./scripts/test.sh
