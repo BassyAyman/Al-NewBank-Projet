@@ -2,8 +2,8 @@
 
 set -f
 
-TERMINAL="http://host.docker.internal:80/payOnline"
-WEB="http://host.docker.internal:81/payOnline"
+TERMINAL="http://localhost:80/payOnline"
+WEB="http://localhost:81/payOnline"
 
 
 test_post() {
