@@ -45,7 +45,7 @@ jobs:
           chmod +x ./scripts/dump-master-database.sh
 
       - name: Build and Run Services
-        run: ./prepareAll.sh ${{ matrix.instances[0] }} ${{ matrix.instances[1] }}
+        run: ./prepareAll.sh ${{ matrix.instances[0] }} ${{ matrix.instances[1] }} --non-interactive
 
       - name: Dump database
         run: ./scripts/dump-master-database.sh
