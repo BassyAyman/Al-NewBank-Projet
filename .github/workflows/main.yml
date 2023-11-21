@@ -63,13 +63,13 @@ jobs:
                       exit 1
                   fi
                   echo "Service $service_name is not connected yet at $url"
-                  sleep 3
+                  sleep 4
               done
               echo "Service $service_name is up and running at $url"
           }
 
-          # Set a timeout, for example, 60 seconds
-          TIMEOUT=60
+          # Set a timeout, for example, 120 seconds
+          TIMEOUT=120
           
           echo "Waiting for services to start..."
           wait_on_health "http://localhost:80/actuator/health" "Terminal Transaction Service" $TIMEOUT
