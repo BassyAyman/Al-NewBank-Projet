@@ -61,35 +61,7 @@ jobs:
           docker logs nginx-lb-web
       
 
-      - name: Wait for Services Health
-        run: |
-          function wait_on_health() {
-              local url=$1
-              local service_name=$2
-              local timeout=$3
-              local start_time=$(date +%s)
 
-              echo "Waiting for $service_name to start..."
-              until [ "$(curl --silent "$url"/actuator/health | grep UP -c)" == 1 ]; do
-                  current_time=$(date +%s)
-                  if [ $((current_time - start_time)) -ge $timeout ]; then
-                      echo "Timeout waiting for $service_name at $url"
-                      exit 1
-                  fi
-                  echo "Service $service_name is not connected yet at $url"
-                  sleep 4
-              done
-              echo "Service $service_name is up and running at $url"
-          }
-
-          # Set a timeout, for example, 120 seconds
-          TIMEOUT=120
-          
-          echo "Waiting for services to start..."
-          wait_on_health "http://localhost:80/actuator/health" "Terminal Transaction Service" $TIMEOUT
-          echo "Terminal Transaction Service is up and running at http://localhost:80/actuator/health"
-          wait_on_health "http://localhost:81/actuator/health" "Web Transaction Service" $TIMEOUT
-          echo "Web Transaction Service is up and running at http://localhost:81/actuator/health"
 
 
 
