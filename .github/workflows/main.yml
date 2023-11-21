@@ -47,18 +47,6 @@ jobs:
       - name: Build and Run Services
         run: ./prepareAll.sh ${{ matrix.instances[0] }} ${{ matrix.instances[1] }} --non-interactive
 
-      - name: Dump database
-        run: ./scripts/dump-master-database.sh
-
-      - name: Check Database Dump
-        run: |
-          echo "-> Checking database dump"
-          if [ ! -s ../sql/test_data.sql ]; then
-            echo "The file test_data.sql is empty, aborting..."
-            exit 1
-          fi
-          echo "-> Database dump successful"
-
       - name: Wait for Services Health
         run: |
           function wait_on_health() {
@@ -93,6 +81,18 @@ jobs:
 
       - name: Run Tests
         run: ./scripts/test.sh
+
+      - name: Dump database
+        run: ./scripts/dump-master-database.sh
+
+      - name: Check Database Dump
+        run: |
+          echo "-> Checking database dump"
+          if [ ! -s ../sql/test_data.sql ]; then
+            echo "The file test_data.sql is empty, aborting..."
+            exit 1
+          fi
+          echo "-> Database dump successful"
 
       - name: Cleanup Docker Environment
         if: always()
