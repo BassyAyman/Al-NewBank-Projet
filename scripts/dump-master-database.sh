@@ -2,7 +2,7 @@
 # used to save the current state of the database (the file generated is used to populate the database in the docker-compose.yml)
 
 DB_USER="postgres"
-DB_HOST="host.docker.internal"
+DB_HOST="localhost"
 DB_NAME="clientinfo_db"
 
 export PGPASSWORD="$DB_PASSWORD" # avoid password prompt

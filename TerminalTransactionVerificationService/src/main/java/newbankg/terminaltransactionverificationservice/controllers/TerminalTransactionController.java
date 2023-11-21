@@ -59,7 +59,7 @@ public class TerminalTransactionController {
 
     private String sendTransactionToService(Transaction transaction) {
         RestTemplate restTemplate = new RestTemplate();
-        String serviceUrl = "http://host.docker.internal:8080/transaction";
+        String serviceUrl = "http://localhost:8080/transaction";
         ResponseEntity<String> response = restTemplate.postForEntity(serviceUrl, transaction, String.class);
 
         return response.getBody();
