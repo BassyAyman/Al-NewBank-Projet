@@ -25,9 +25,9 @@ test_post() {
 echo "--------------------"
 echo "Valid transaction"
 JSON_DATA='{
-    "clientFirstName": "Test",
-    "clientLastName": "Sh",
-    "amountOfTransaction": 150,
+    "clientFirstName": "John",
+    "clientLastName": "Doe",
+    "amountOfTransaction": 10,
     "clientCreditCardNumber": "4532759734545858",
     "clientCreditCartDateExpiration": "12/24",
     "clientCVV": "123"
@@ -37,9 +37,9 @@ test_post "$TERMINAL" "$JSON_DATA" "Transaction successful"
 echo "--------------------"
 echo "Wrong luhn algo"
 JSON_DATA='{
-    "clientFirstName": "Test",
-    "clientLastName": "Sh",
-    "amountOfTransaction": 150,
+    "clientFirstName": "John",
+    "clientLastName": "Doe",
+    "amountOfTransaction": 10,
     "clientCreditCardNumber": "4532759734545850",
     "clientCreditCartDateExpiration": "12/24",
     "clientCVV": "123"
@@ -49,9 +49,9 @@ test_post "$TERMINAL" "$JSON_DATA" "Internal Server Error"
 echo "--------------------"
 echo "Card expired"
 JSON_DATA='{
-    "clientFirstName": "Test",
-    "clientLastName": "Sh",
-    "amountOfTransaction": 150,
+    "clientFirstName": "John",
+    "clientLastName": "Doe",
+    "amountOfTransaction": 10,
     "clientCreditCardNumber": "453275973454585",
     "clientCreditCartDateExpiration": "10/23",
     "clientCVV": "123"
@@ -62,8 +62,8 @@ test_post "$TERMINAL" "$JSON_DATA" "Internal Server Error"
 echo "--------------------"
 echo "Too big transaction"
 JSON_DATA='{
-    "clientFirstName": "Test",
-    "clientLastName": "Sh",
+    "clientFirstName": "John",
+    "clientLastName": "Doe",
     "amountOfTransaction": 100000000,
     "clientCreditCardNumber": "453275973454585",
     "clientCreditCartDateExpiration": "10/23",

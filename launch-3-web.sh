@@ -1,0 +1,1 @@
+docker-compose up --build --scale terminal-transaction-docker-service=1 --scale web-transaction-docker-service=3

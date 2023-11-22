@@ -4,12 +4,15 @@ import jakarta.annotation.PostConstruct;
 import newbankg.webtransactionservice.models.Account;
 import newbankg.webtransactionservice.models.Client;
 import newbankg.webtransactionservice.models.CreditCard;
-import newbankg.webtransactionservice.models.Transaction;
 import newbankg.webtransactionservice.repositories.AccountRepository;
 import newbankg.webtransactionservice.repositories.ClientRepository;
 import newbankg.webtransactionservice.repositories.CreditCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 @Component
 public class Populate {
@@ -25,14 +28,46 @@ public class Populate {
     public void populate() {
         System.out.println("Populating...");
 
+        //add original john doe
+        // addAccount(1, "John", "Doe", "4532759734545858", "12/25", "123");
+
+        populateFromCSV("valid-credit-cards.csv");
+
+    }
+
+    public void populateFromCSV(String path) {
+        String line = "";
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(path));
+
+            int count = 2; // Compteur de lignes
+            while ((line = br.readLine()) != null) {
+                addAccount(count, "John", "Doe", line, "12/25", "123");
+                count++;
+            }
+
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void populateDumb(int numberOfClients) {
+        for (int i = 2; i < numberOfClients+2; i++) {
+            addAccount(i, "John", "Doe", "111111111111" + String.format("%04d", i), "12/25", "123");
+        }
+    }
+
+    public void addAccount(long id, String firstName, String lastName, String creditCardNumber, String creditCardDateExpiration, String creditCardCvv) {
         Client client = new Client();
-        client.setCustomerIdentifier(1L);
-        client.setFirstName("John");
-        client.setLastName("Doe");
+        client.setCustomerIdentifier(id);
+        client.setFirstName(firstName);
+        client.setLastName(lastName);
         clientRepository.save(client);
 
         Account account = new Account();
-        account.setId(1L);
+        account.setId(id);
         account.setClientAccount(client);
         account.setAmountMoney(1000);
         account.setInDebitAmount(0);
@@ -40,19 +75,11 @@ public class Populate {
         accountRepository.save(account);
 
         CreditCard creditCard = new CreditCard();
-        creditCard.setId(1L);
+        creditCard.setId(id);
         creditCard.setClientInformation(client);
-        creditCard.setCreditCardNumber("1234567891234567");
-        creditCard.setCreditCartDateExpiration("12/25");
-        creditCard.setCvv("123");
+        creditCard.setCreditCardNumber(creditCardNumber);
+        creditCard.setCreditCartDateExpiration(creditCardDateExpiration);
+        creditCard.setCvv(creditCardCvv);
         creditCardRepository.save(creditCard);
-
-//        Transaction transaction = new Transaction();
-//        transaction.setClientFirstName("John");
-//        transaction.setClientLastName("Doe");
-//        transaction.setAmountOfTransaction(100);
-//        transaction.setClientCreditCardNumber("1234567891234567");
-//        transaction.setClientCreditCartDateExpiration("12/25");
-//        transaction.setClientCVV("123");
     }
 }
