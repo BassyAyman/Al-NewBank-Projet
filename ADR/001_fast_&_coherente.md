@@ -1,4 +1,4 @@
-# Mise en place d'une architecture de transaction rapide et coherente en reponse du retrait de l'hypothese sur le WebServiceValidation
+# Mise en place d'une architecture de transaction rapide et coherente en reponse du retrait de l'hypothese sur le WebServiceValidation dans un contexte materiel et avec des ressources tres reduite
 
 * Statut : proposé et accepté, en cours de developpement pour confirmation
 * Décideurs : Bassy Ayman.
