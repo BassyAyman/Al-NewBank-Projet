@@ -33,12 +33,16 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
             try {
                 Transaction validatedTransaction = transactionValidator.makeTransactionWithCardId(transaction);
                 stringKafkaTemplate.send("transactionWrite", validatedTransaction);
+                LOGGER.info("Transaction successful: " + validatedTransaction.toString());
                 return ResponseEntity.ok("Transaction successful");
             } catch (InvalidTransactionException e) {
+                LOGGER.info("Transaction failed");
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
             } catch (NoSuchElementException e) {
+                LOGGER.info("Transaction failed");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             } catch (Exception e) {
+                LOGGER.info("Transaction failed");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error" + e);
             }
         }

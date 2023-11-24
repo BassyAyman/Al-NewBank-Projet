@@ -4,6 +4,6 @@ import newbankg.terminaltransactionverificationservice.models.Account;
 
 public interface IBalanceChecker {
 
-    boolean isBalanceOk(Account clientAcc);
+    boolean isBalanceOk(int amountToPay, Account client);
 
 }

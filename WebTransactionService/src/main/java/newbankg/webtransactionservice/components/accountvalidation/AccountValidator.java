@@ -1,6 +1,5 @@
 package newbankg.webtransactionservice.components.accountvalidation;
 
-import newbankg.webtransactionservice.interfaces.accountbusiness.IAccountInformation;
 import newbankg.webtransactionservice.interfaces.accountbusiness.IAccountValidator;
 import newbankg.webtransactionservice.interfaces.accountbusiness.IBalanceChecker;
 import newbankg.webtransactionservice.interfaces.accountbusiness.ILimitChecker;
@@ -12,9 +11,6 @@ import org.springframework.stereotype.Component;
 public class AccountValidator implements IAccountValidator {
 
     @Autowired
-    IAccountInformation accountInformation;
-
-    @Autowired
     ILimitChecker limitChecker;
 
     @Autowired
@@ -24,6 +20,6 @@ public class AccountValidator implements IAccountValidator {
     @Override
     public boolean checkAccount(Account account, int amountOfTransaction) {
         return limitChecker.checkLimit(amountOfTransaction, account.getAccountLimit())  //
-                && balanceChecker.isBalanceOk(amountOfTransaction, account.getAmountMoney());
+                && balanceChecker.isBalanceOk(amountOfTransaction, account);
     }
 }

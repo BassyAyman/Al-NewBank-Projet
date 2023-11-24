@@ -93,7 +93,7 @@ COPY public.client (customer_identifier, first_name, last_name) FROM stdin;
 --
 
 COPY public.credit_card (client_information_customer_identifier, id, credit_card_date_expiration, credit_card_number, cvv) FROM stdin;
-1	1	12/25	1234567891234567	123
+1	1	12/25	4532759734545858	123
 \.
 
 

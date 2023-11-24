@@ -2,7 +2,7 @@
 
 set -e
 
-if [ $# -ne 2 ]; then
+if [ $# -lt 2 ]; then
     echo "Usage: $0 <number-of-instances of terminal transaction service> <number-of-instances of web transaction service>"
     exit 1
 fi
@@ -25,9 +25,24 @@ echo "waiting the database run"
 sleep 5
 # Configure PostgreSQL and restart containers
 echo "Setting up PostgreSQL..."
-docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "CREATE USER reading_user WITH PASSWORD 'reading_pass';"
-docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "GRANT CONNECT ON DATABASE clientinfo_db TO reading_user;"
-docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO reading_user;"
-docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO reading_user;"
-docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "GRANT USAGE ON SCHEMA public TO reading_user;"
-docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO reading_user;"
+# if script is run with parameter "non-interactive"
+AN_USER_ALREADY_EXISTS=$(docker exec postgres-master psql -U postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='reading_user'")
+if [ "$AN_USER_ALREADY_EXISTS" = "1" ]; then
+    echo "User reading_user already exists"
+else
+    if [ "$3" = "--non-interactive" ]; then
+      docker exec postgres-master psql -U postgres -d clientinfo_db -c "CREATE USER reading_user WITH PASSWORD 'reading_pass';"
+      docker exec postgres-master psql -U postgres -d clientinfo_db -c "GRANT CONNECT ON DATABASE clientinfo_db TO reading_user;"
+      docker exec postgres-master psql -U postgres -d clientinfo_db -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO reading_user;"
+      docker exec postgres-master psql -U postgres -d clientinfo_db -c "GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO reading_user;"
+      docker exec postgres-master psql -U postgres -d clientinfo_db -c "GRANT USAGE ON SCHEMA public TO reading_user;"
+      docker exec postgres-master psql -U postgres -d clientinfo_db -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO reading_user;"
+    else
+      docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "CREATE USER reading_user WITH PASSWORD 'reading_pass';"
+      docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "GRANT CONNECT ON DATABASE clientinfo_db TO reading_user;"
+      docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO reading_user;"
+      docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO reading_user;"
+      docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "GRANT USAGE ON SCHEMA public TO reading_user;"
+      docker exec -it postgres-master psql -U postgres -d clientinfo_db -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO reading_user;"
+    fi
+fi

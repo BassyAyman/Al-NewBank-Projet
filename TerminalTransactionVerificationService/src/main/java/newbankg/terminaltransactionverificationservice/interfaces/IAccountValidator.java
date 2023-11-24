@@ -1,7 +1,9 @@
 package newbankg.terminaltransactionverificationservice.interfaces;
 
+import newbankg.terminaltransactionverificationservice.models.Account;
+
 public interface IAccountValidator {
 
-    boolean checkAccountWithId(long id);
+    boolean checkAccount(Account account, int amountOfTransaction);
 
 }

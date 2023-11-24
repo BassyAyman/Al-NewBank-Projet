@@ -1,7 +1,9 @@
 package newbankg.terminaltransactionverificationservice.interfaces;
 
+import newbankg.terminaltransactionverificationservice.models.Account;
+
 public interface ITransactionValidator {
 
-    boolean makeTransactionWithCardId(long cardId);
+    boolean makeTransaction(Account account, int amountOfTransaction);
 
 }
