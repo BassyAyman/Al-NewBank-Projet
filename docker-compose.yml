@@ -7,7 +7,7 @@ services:
     container_name: nginx-lb-terminal
     image: nginx:latest
     depends_on:
-      - terminal-transaction-docker-service
+      - terminal-transaction-service
     ports:
       - "81:80" # port 81 for terminal transactions and port 80 for web transactions
     volumes:
@@ -16,7 +16,8 @@ services:
       - igorbank-net
 
   # Terminal Transaction Service (Spring)
-  terminal-transaction-docker-service:
+  terminal-transaction-service:
+    container_name: terminal-transaction-service
     image: "terminal-transaction-service"
     build:
       context: ./TerminalTransactionVerificationService
@@ -31,7 +32,8 @@ services:
     container_name: nginx-lb-web
     image: nginx:latest
     depends_on:
-      - web-transaction-docker-service
+      - web-transaction-service-1
+      - web-transaction-service-2
     ports:
       - "80:80" # port 81 for terminal transactions and port 80 for web transactions
     volumes:
@@ -39,11 +41,22 @@ services:
     networks:
       - igorbank-net
 
-  # Web Transaction Service (Spring)
-  web-transaction-docker-service:
+  # First instance of Web Transaction Service (Spring)
+  web-transaction-service-1:
+    container_name: web-transaction-service-1
     image: "web-transaction-service"
-#    ports:
-#      - "8085:8080"
+    build:
+      context: ./WebTransactionService
+    depends_on:
+      postgres-slave:
+        condition: service_healthy
+    networks:
+      - igorbank-net
+
+  # Second instance of Web Transaction Service (Spring)
+  web-transaction-service-2:
+    container_name: web-transaction-service-2
+    image: "web-transaction-service"
     build:
       context: ./WebTransactionService
     depends_on:

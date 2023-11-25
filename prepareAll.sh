@@ -20,7 +20,7 @@ compile_dir "TerminalTransactionVerificationService"
 compile_dir "WebTransactionService"
 
 echo "Starting Docker containers..."
-docker-compose up --build -d --scale terminal-transaction-docker-service="$1" --scale web-transaction-docker-service="$2"
+docker-compose up --build -d
 echo "waiting the database run"
 sleep 5
 # Configure PostgreSQL and restart containers
