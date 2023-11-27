@@ -3,6 +3,8 @@ package newbankg.webtransactionservice.controllers;
 import newbankg.webtransactionservice.InvalidTransactionException;
 import newbankg.webtransactionservice.interfaces.ITransactionValidator;
 import newbankg.webtransactionservice.models.Transaction;
+import newbankg.webtransactionservice.models.redismodels.Debit;
+import newbankg.webtransactionservice.redisrepo.DebitRedisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
         @Autowired
         ITransactionValidator transactionValidator;
+
+        @Autowired
+        private DebitRedisRepository debitRedisRepository;
 
         @Autowired
         private KafkaTemplate<String, Transaction> stringKafkaTemplate;
@@ -56,5 +61,29 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
             }
             LOGGER.info("WebTransactionService is ok");
             return ResponseEntity.ok("WebTransactionService is ok");
+        }
+
+        @PostMapping(path = "debit", consumes = APPLICATION_JSON_VALUE)
+        public ResponseEntity<String> putDebitInRedis(@RequestBody Debit debit){
+            try {
+                debitRedisRepository.save(debit);
+                LOGGER.info("Debit saved in Redis");
+                return ResponseEntity.ok("Debit saved in Redis");
+            } catch (Exception e) {
+                LOGGER.info("Debit failed to save in Redis");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error" + e);
+            }
+        }
+
+        @GetMapping(path = "debit")
+        public ResponseEntity<Debit> getDebitFromRedis(@RequestBody String id){
+            try {
+                Debit debit = debitRedisRepository.findById(id).get();
+                LOGGER.info("Debit retrieved from Redis");
+                return ResponseEntity.ok(debit);
+            } catch (Exception e) {
+                LOGGER.info("Debit failed to retrieve from Redis + " + e);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
         }
 }

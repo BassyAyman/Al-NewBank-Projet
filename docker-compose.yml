@@ -48,8 +48,28 @@ services:
     depends_on:
       postgres-slave:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
       - igorbank-net
+
+  # cache redis
+  redis:
+    container_name: redis
+    image: "redis:latest"
+    hostname: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - igorbank-net
+    volumes:
+      - cache:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
 
   # Kafka setup
   zookeeper:
@@ -175,3 +195,4 @@ networks:
 
 volumes:
   postgresql_master_data:
+  cache:
