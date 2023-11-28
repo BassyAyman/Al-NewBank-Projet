@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 import java.util.logging.Logger;
@@ -76,7 +73,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         }
 
         @GetMapping(path = "debit")
-        public ResponseEntity<Debit> getDebitFromRedis(@RequestBody String id){
+        public ResponseEntity<Debit> getDebitFromRedis(@RequestParam String id){
             try {
                 Debit debit = debitRedisRepository.findById(id).get();
                 LOGGER.info("Debit retrieved from Redis");
