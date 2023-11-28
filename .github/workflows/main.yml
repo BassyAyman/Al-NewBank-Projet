@@ -3,11 +3,7 @@ name: Check Build and Test
 # on push or pull request to all branches excluding master
 on:
   push:
-    branches-ignore:
-      - master
   pull_request:
-    branches-ignore:
-      - master
 
 jobs:
   build-and-test:
