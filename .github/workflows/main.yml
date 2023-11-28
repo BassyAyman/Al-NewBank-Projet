@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        instances: [ [ 1, 1 ] ] # [ [ 1, 1 ], [ 4, 4 ] ]
+        instances: [ [ 1, 1 ], [ 4, 4 ] ]
       fail-fast: true
       max-parallel: 1
 
@@ -49,14 +49,14 @@ jobs:
       - name: Build and Run Services
         run: ./prepareAll.sh ${{ matrix.instances[0] }} ${{ matrix.instances[1] }} --non-interactive
 
-      - name: DEBUG
-        run: |
-          echo "docker ps"
-          docker-compose ps
-          echo "docker logs"
-          docker-compose logs
-          echo "docker network ls"
-          docker network ls
+#      - name: DEBUG
+#        run: |
+#          echo "docker ps"
+#          docker-compose ps
+#          echo "docker logs"
+#          docker-compose logs
+#          echo "docker network ls"
+#          docker network ls
 
       - name: Check Actuator Health
         run: |
@@ -83,6 +83,16 @@ jobs:
         env:
           JAVA_HOME: /opt/hostedtoolcache/Java_Adopt_jdk/17.0.9-9/x64
 
+      - name: Check Database filled
+        run: |
+          echo "-> Checking database dump"
+          if [ ! -s ../sql/test_data.sql ]; then
+            echo "The file test_data.sql is empty, aborting..."
+            exit 1
+          else
+            echo "-> Database was filled successfully"
+          fi
+
           
       - name: Run Tests
         shell: bash
@@ -96,10 +106,11 @@ jobs:
         run: |
           echo "-> Checking database dump"
           if [ ! -s ../sql/test_data.sql ]; then
-            echo "The file test_data.sql is empty, aborting..."
+            echo "-> Database dump successful"
+          else
+            echo "The file test_data.sql is not empty, aborting..."
             exit 1
           fi
-          echo "-> Database dump successful"
 
       - name: Cleanup Docker Environment
         if: always()
