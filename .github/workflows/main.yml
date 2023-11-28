@@ -61,17 +61,35 @@ jobs:
       - name: Check Actuator Health
         run: |
           echo "Checking actuator health"
-          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:80/actuator/health)
-          if [ "$response" != "200" ]; then
-            echo "Actuator health check failed with HTTP status: $response"
+          retry_count=0
+          max_retries=20
+          while [ $retry_count -lt $max_retries ]; do
+            response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:80/actuator/health)
+            if [ "$response" == "200" ]; then
+              echo "Actuator health check passed"
+              break
+            else
+              echo "Actuator health check failed with HTTP status: $response"
+              retry_count=$((retry_count+1))
+              echo "Retrying in 10 seconds... Attempt $retry_count of $max_retries"
+              sleep 10
+            fi
+          done
+          if [ $retry_count -eq $max_retries ]; then
+            echo "Actuator health check failed after $max_retries attempts."
             exit 1
           fi
-          echo "Actuator health check passed"
+        shell: bash
+        env:
+          JAVA_HOME: /opt/hostedtoolcache/Java_Adopt_jdk/17.0.9-9/x64
+
           
       - name: Run Tests
+        shell: bash
         run: ./scripts/test.sh
 
       - name: Dump database
+        shell: bash
         run: ./scripts/dump-master-database.sh
 
       - name: Check Database Dump
