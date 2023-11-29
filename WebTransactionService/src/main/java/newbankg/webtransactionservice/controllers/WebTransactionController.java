@@ -4,8 +4,9 @@ import newbankg.webtransactionservice.InvalidTransactionException;
 import newbankg.webtransactionservice.interfaces.ITransactionValidator;
 import newbankg.webtransactionservice.models.Transaction;
 import newbankg.webtransactionservice.models.redismodels.Debit;
-import newbankg.webtransactionservice.redisrepo.DebitRedisRepository;
+import newbankg.webtransactionservice.redisrepo.RedisFunction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -25,7 +26,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         ITransactionValidator transactionValidator;
 
         @Autowired
-        private DebitRedisRepository debitRedisRepository;
+        RedisFunction redisFunction;
 
         @Autowired
         private KafkaTemplate<String, Transaction> stringKafkaTemplate;
@@ -63,7 +64,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         @PostMapping(path = "debit", consumes = APPLICATION_JSON_VALUE)
         public ResponseEntity<String> putDebitInRedis(@RequestBody Debit debit){
             try {
-                debitRedisRepository.save(debit);
+                redisFunction.save(Long.parseLong(debit.getClientId()), debit.getDebit());
                 LOGGER.info("Debit saved in Redis");
                 return ResponseEntity.ok("Debit saved in Redis");
             } catch (Exception e) {
@@ -73,9 +74,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         }
 
         @GetMapping(path = "debit")
-        public ResponseEntity<Debit> getDebitFromRedis(@RequestParam String id){
+        public ResponseEntity<Integer> getDebitFromRedis(@RequestParam Long id){
             try {
-                Debit debit = debitRedisRepository.findById(id).get();
+                Integer debit = redisFunction.getClientDebitInContext(id).get();
                 LOGGER.info("Debit retrieved from Redis");
                 return ResponseEntity.ok(debit);
             } catch (Exception e) {

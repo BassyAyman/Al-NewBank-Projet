@@ -7,6 +7,7 @@ import newbankg.webtransactionservice.interfaces.cartbusiness.ValidateCardValida
 import newbankg.webtransactionservice.models.Account;
 import newbankg.webtransactionservice.models.CreditCard;
 import newbankg.webtransactionservice.models.Transaction;
+import newbankg.webtransactionservice.redisrepo.RedisFunction;
 import newbankg.webtransactionservice.repositories.AccountRepository;
 import newbankg.webtransactionservice.repositories.CreditCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,10 @@ public class TransactionValidationManager implements ITransactionValidator {
 
     @Autowired
     AccountRepository accountRepository;
-
     @Autowired
     CreditCardRepository creditCardRepository;
+    @Autowired
+    RedisFunction redisFunction;
 
     /**
      * Check if the transaction is valid, if not throw an exception.
@@ -63,6 +65,8 @@ public class TransactionValidationManager implements ITransactionValidator {
             LOGGER.log(Level.INFO, "Account is not valid");
             throw new InvalidTransactionException("Account is not valid");
         }
+        int debit = redisFunction.getClientDebitInContext(account.getClientAccount().getCustomerIdentifier()).get();
+        LOGGER.log(Level.INFO, "Transaction is valid and new debit equal = "+ debit);
         return transaction;
     }
 }

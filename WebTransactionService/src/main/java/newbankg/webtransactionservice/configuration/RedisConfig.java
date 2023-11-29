@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 
 @Configuration
 @ConfigurationProperties(prefix = "spring.redis")
@@ -24,9 +25,20 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
+    public RedisTemplate<Long, Integer> redisTemplate() {
+        RedisTemplate<Long, Integer> template = new RedisTemplate<>();
         template.setConnectionFactory(lettuceConnectionFactory());
+        // Configuring serializers
+        template.setKeySerializer(new GenericToStringSerializer<>(Long.class));
+        template.setValueSerializer(new GenericToStringSerializer<>(Integer.class));
+
+        // Enable transaction support
+        template.setEnableTransactionSupport(true);
+
+        // For HahOperation
+        template.setHashKeySerializer(new GenericToStringSerializer<>(Long.class));
+        template.setHashValueSerializer(new GenericToStringSerializer<>(Integer.class));
         return template;
     }
+
 }
