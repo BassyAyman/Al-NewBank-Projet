@@ -204,3 +204,4 @@ networks:
 
 volumes:
   postgresql_master_data:
+  cache:

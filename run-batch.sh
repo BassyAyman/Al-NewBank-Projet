@@ -1,1 +1,1 @@
-curl -X PUT http//localhost:8083
+curl -X PUT http://localhost:8083
