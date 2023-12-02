@@ -1,9 +1,10 @@
 import {createClient, RedisClientType} from 'redis';
 
+const redisUrl = `redis://${process.env.REDIS_HOST}:6379`;
 
 function resetAllRedisDebits() {
     const client: RedisClientType = createClient({
-        url: 'redis://localhost:6379',
+        url: redisUrl,
     });
 
     client.on('error', (err: Error) => {

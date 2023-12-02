@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "cross-env POSTGRES_HOST=postgres-master REDIS_HOST=redis ts-node index.ts",
+    "start-local": "cross-env POSTGRES_HOST=localhost REDIS_HOST=localhost ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -17,6 +18,7 @@
   "devDependencies": {
     "@types/node": "^20.10.2",
     "@types/pg": "^8.10.9",
+    "cross-env": "^7.0.3",
     "pg": "^8.11.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.2"

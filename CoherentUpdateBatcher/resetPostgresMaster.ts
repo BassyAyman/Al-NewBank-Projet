@@ -3,7 +3,7 @@ import {Client} from 'pg';
 function resetAllPostgresDebits() {
     const client = new Client({
         user: 'postgres',
-        host: 'localhost',
+        host: process.env.POSTGRES_HOST,
         database: 'clientinfo_db',
         port: 5432,
     });
