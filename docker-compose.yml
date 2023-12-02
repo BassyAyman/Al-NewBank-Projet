@@ -189,6 +189,15 @@ services:
     networks:
       - igorbank-net
 
+  coherent-update-batcher:
+    container_name: coherent-update-batcher
+    build:
+      context: ./CoherentUpdateBatcher
+    ports:
+      - "8083:8083"
+    networks:
+      - igorbank-net
+
 networks:
   igorbank-net:
     driver: bridge
