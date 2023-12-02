@@ -13,14 +13,13 @@ public class AccountBalanceVerificator implements IBalanceChecker {
     private RedisFunction redisFunction;
 
     @Override
-    public boolean isBalanceOk(int amountToPay, Account client) {
+    public int isBalanceOk(int amountToPay, Account client) {
         int clientAccountDebit =
                 redisFunction.getClientDebitInContext(client.getClientAccount().getCustomerIdentifier())
                         .orElseGet(() -> {
-                            redisFunction.save(client.getClientAccount().getCustomerIdentifier(), 0);
-                            return 0;
+                            redisFunction.save(client.getClientAccount().getCustomerIdentifier(), amountToPay);
+                            return amountToPay;
                         });
-        return amountToPay <= client.getAmountMoney() - clientAccountDebit;
+        return (amountToPay <= client.getAmountMoney() - clientAccountDebit)? clientAccountDebit : -1;
     }
-
 }

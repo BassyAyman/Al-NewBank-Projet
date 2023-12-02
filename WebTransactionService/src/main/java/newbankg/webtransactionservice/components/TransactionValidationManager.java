@@ -65,8 +65,10 @@ public class TransactionValidationManager implements ITransactionValidator {
             LOGGER.log(Level.INFO, "Account is not valid");
             throw new InvalidTransactionException("Account is not valid");
         }
+        // line in manner of test //TODO remove if logique ok
         int debit = redisFunction.getClientDebitInContext(account.getClientAccount().getCustomerIdentifier()).get();
         LOGGER.log(Level.INFO, "Transaction is valid and new debit equal = "+ debit);
+        // end of line
         return transaction;
     }
 }
