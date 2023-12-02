@@ -16,10 +16,7 @@ public class AccountBalanceVerificator implements IBalanceChecker {
     public int isBalanceOk(int amountToPay, Account client) {
         int clientAccountDebit =
                 redisFunction.getClientDebitInContext(client.getClientAccount().getCustomerIdentifier())
-                        .orElseGet(() -> {
-                            redisFunction.save(client.getClientAccount().getCustomerIdentifier(), amountToPay);
-                            return amountToPay;
-                        });
+                        .orElseGet(() -> 0); // debit is 0 if not found in redis
         return (amountToPay <= client.getAmountMoney() - clientAccountDebit)? clientAccountDebit : -1;
     }
 }
