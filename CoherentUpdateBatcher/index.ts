@@ -11,10 +11,10 @@ app.get('/', (req, res) => {
 });
 
 app.put('/', (req, res) => {
-    console.log("Resetting all debits in Redis...");
-    resetAllRedisDebits();
     console.log("Resetting all debits in Postgres master...");
     resetAllPostgresDebits();
+    console.log("Resetting all debits in Redis...");
+    resetAllRedisDebits();
     res.send("Request received");
 });
 
