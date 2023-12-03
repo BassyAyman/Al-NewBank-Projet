@@ -1,3 +1,37 @@
+# Weekly Status ( Week 48 ) EVO
+
+## What was done : 
+* ADR_003 : Autre moyen de faire pour la mise a jour coherente
+* ADR_004 : Hot replica Redis
+* Implementation nouvelle transaction impliquant Redis
+* Implementation UpdateBatchingService
+* Test meme scenario de payement que pour la demo de construction avec test de charge pour la nouvelle version
+
+## What is planned 
+* test scenario de payement enchainer par un meme client
+* Mise en place d'un replica de redis
+* Explorer une soltution impliquant docker-swarm.
+
+## What's the difference from last week
+* Nouveaux ADR
+* CI plus rapide, ajuster
+* Une instance du Web Service pouvant etre multiplier dynamiquement au moment du docker-compose up. (plus d'instance static)
+
+## Issues : 
+* Question qui se pose, quelle est la meilleurs approche concernant l'update generale du systeme de transaction. Il est obligatoire de maintenir une coherence forte.
+Cela pose alors une grande problematique sur la disponibilité de la possibilité de payer sur le Web sur les horaires local a la region de faible trafique choisie pour
+remettre les compteurs a zero. ( solution exploré - ADR_003).
+
+## Risk : 
+* none
+
+## RYG Flag : 
+* Green : Nous avons globalement bien avancer au niveau de la reflexion et de l'implementation. Nous avons un walking skeleton de notre process de transaction.
+  Nous avons aussi une premiere version "naive" implementer en typescript du batching process. Et nous avons pu discuter et mener une reflexion general sur les choix possible
+  a faire afin de d'optimiser la question de disponibilité posée. Ils nous restera pour la suite a explorer les soltitions envisageable au niveau du deployement sur plusieurs
+  region (unique si plus de 30m de personne), la mise en place de solution de fails-over inter-region possible et enfin la mise en place de regle propre a chaque region.
+
+
 # Weekly Status ( Week 47 ) EVO
 
 ## What was done : 
