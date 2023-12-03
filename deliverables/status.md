@@ -2,7 +2,7 @@
 
 ## What was done : 
 * ADR_003 : Autre moyen de mise à jour cohérente
-j'non* ADR_004 : Hot replica Redis
+* ADR_004 : Hot replica Redis
 * Implémentation d'une nouvelle transaction impliquant Redis
 * Implémentation du service UpdateBatchingService
 * Test du même scénario de paiement que pour la démo de construction avec test de charge pour la nouvelle version
@@ -26,7 +26,8 @@ j'non* ADR_004 : Hot replica Redis
 
 ## RYG Flag : 
 * Green : Nous avons globalement bien avancé en termes de réflexion et d'implémentation. Nous disposons d'un squelette fonctionnel de notre processus de transaction.
-  Nous avons également une première version "naïve" implémentée en TypeScript du processus de batch. De plus, nous avons pu discuter et réfléchir globalement sur les choix possibles afin d'optimiser la question de disponibilité. Il nous reste à explorer les solutions envisageables en termes de déploiement sur plusieurs régions (unique si plus de 30 millions de personnes), la mise en place de solutions de basculement inter-régions et enfin l'établissement de règles propres à chaque région.
+  Nous avons également une première version "naïve" implémentée en TypeScript du processus de batch. De plus, nous avons pu discuter et réfléchir globalement sur les choix possibles afin d'optimiser la question de disponibilité.
+  Il nous reste à explorer les solutions envisageables en termes de déploiement sur plusieurs régions (unique si plus de 30 millions de personnes), la mise en place de solutions de basculement inter-régions et enfin l'établissement de règles propres à chaque région.
 
 
 # Weekly Status ( Week 47 ) EVO
