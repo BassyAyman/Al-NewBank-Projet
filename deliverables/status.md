@@ -1,35 +1,32 @@
 # Weekly Status ( Week 48 ) EVO
 
 ## What was done : 
-* ADR_003 : Autre moyen de faire pour la mise a jour coherente
-* ADR_004 : Hot replica Redis
-* Implementation nouvelle transaction impliquant Redis
-* Implementation UpdateBatchingService
-* Test meme scenario de payement que pour la demo de construction avec test de charge pour la nouvelle version
+* ADR_003 : Autre moyen de mise à jour cohérente
+j'non* ADR_004 : Hot replica Redis
+* Implémentation d'une nouvelle transaction impliquant Redis
+* Implémentation du service UpdateBatchingService
+* Test du même scénario de paiement que pour la démo de construction avec test de charge pour la nouvelle version
 
 ## What is planned 
-* test scenario de payement enchainer par un meme client
-* Mise en place d'un replica de redis
-* Explorer une soltution impliquant docker-swarm.
+* Test de scénarios de paiement enchaînés par un même client
+* Mise en place d'un réplica de Redis
+* Exploration d'une solution impliquant Docker Swarm
 
 ## What's the difference from last week
 * Nouveaux ADR
-* CI plus rapide, ajuster
-* Une instance du Web Service pouvant etre multiplier dynamiquement au moment du docker-compose up. (plus d'instance static)
+* CI plus rapide, ajustement effectué
+* Une instance du Web Service pouvant être multipliée dynamiquement lors du `docker-compose up` (fin des instances statiques)
 
 ## Issues : 
-* Question qui se pose, quelle est la meilleurs approche concernant l'update generale du systeme de transaction. Il est obligatoire de maintenir une coherence forte.
-Cela pose alors une grande problematique sur la disponibilité de la possibilité de payer sur le Web sur les horaires local a la region de faible trafique choisie pour
-remettre les compteurs a zero. ( solution exploré - ADR_003).
+* Question en suspens : quelle est la meilleure approche concernant la mise à jour générale du système de transaction ? Il est crucial de maintenir une cohérence forte.
+  Ceci pose alors un grand défi quant à la disponibilité de la possibilité de paiement sur le Web durant les heures creuses locales choisies pour remettre les compteurs à zéro. (solution explorée - ADR_003).
 
 ## Risk : 
-* none
+* Aucun
 
 ## RYG Flag : 
-* Green : Nous avons globalement bien avancer au niveau de la reflexion et de l'implementation. Nous avons un walking skeleton de notre process de transaction.
-  Nous avons aussi une premiere version "naive" implementer en typescript du batching process. Et nous avons pu discuter et mener une reflexion general sur les choix possible
-  a faire afin de d'optimiser la question de disponibilité posée. Ils nous restera pour la suite a explorer les soltitions envisageable au niveau du deployement sur plusieurs
-  region (unique si plus de 30m de personne), la mise en place de solution de fails-over inter-region possible et enfin la mise en place de regle propre a chaque region.
+* Green : Nous avons globalement bien avancé en termes de réflexion et d'implémentation. Nous disposons d'un squelette fonctionnel de notre processus de transaction.
+  Nous avons également une première version "naïve" implémentée en TypeScript du processus de batch. De plus, nous avons pu discuter et réfléchir globalement sur les choix possibles afin d'optimiser la question de disponibilité. Il nous reste à explorer les solutions envisageables en termes de déploiement sur plusieurs régions (unique si plus de 30 millions de personnes), la mise en place de solutions de basculement inter-régions et enfin l'établissement de règles propres à chaque région.
 
 
 # Weekly Status ( Week 47 ) EVO
