@@ -1,6 +1,6 @@
 import express from "express";
-import resetAllRedisDebits from "./resetRedis";
-import resetAllPostgresDebits from "./resetPostgresMaster";
+import {connectToPostgres, getAllCustomers, updateAccountBalance} from "./resetPostgresMaster";
+import {connectToRedis, resetDebitForCustomer} from "./resetRedis";
 
 const app = express();
 const port = 8083;
@@ -10,11 +10,18 @@ app.get('/', (req, res) => {
     res.send("send a PUT request on / to reset all debits");
 });
 
-app.put('/', (req, res) => {
-    console.log("Resetting all debits in Postgres master...");
-    resetAllPostgresDebits();
-    console.log("Resetting all debits in Redis...");
-    resetAllRedisDebits();
+app.put('/', async (req, res) => {
+    const pgClient = await connectToPostgres();
+    const redisClient = await connectToRedis();
+
+    const customerIds: number[] = await getAllCustomers(pgClient);
+    console.log(`Found ${customerIds.length} customers`);
+    for (const customerId of customerIds) {
+        console.log(`Updateing balance of customer ${customerId}`);
+        await updateAccountBalance(pgClient, customerId);
+        await resetDebitForCustomer(redisClient, customerId);
+    }
+
     res.send("Request received");
 });
 
