@@ -1,3 +1,34 @@
+# Weekly Status ( Week 49 ) EVO
+
+## What was done : 
+* ADR_005 : Solution au probleme de coherence du debis en cas de transaction client pendant un batch process
+* Reflexion sur une implementation lier au fails-overs inter-regions
+* Test du scenario du client qui effectue plusieurs transaction d'affiler
+
+## What is planned 
+* Docker Swarm implementation apres disution avec l'equipe mardi
+* Changement dans l'implementation general pour faire matcher l'ADR_005 apres discrution avec l'equipe mardi
+* Mise en attente de la mise en place du replica Redis. (utilité immediate moindre, risque de se faire refactor par la suite)
+
+## What's the difference from last week
+* Nouveaux ADR
+* Ajustement dans la CI/CD
+* Une instance du Web Service pouvant être multipliée dynamiquement lors du `docker-compose up` (fin des instances statiques)
+
+## Issues : 
+* Deploiement avec docker-compose problematique pour des besoins de realisation de demo. Voir pour la mise en place d'une autre solution permettant la mise en place
+  du fail-over inter regions basée sur le DNS pour rediriger les requetes.
+
+## Risk : 
+* Mauvaise interpretation d'un fails-over inter regions. Nous ne savons pas si il s'agit d'un fails over d'un service, ce qui ve rediriger la requete vers le meme service dans une autre regions
+  ou si c'est un fails overs si toute l'infrastructure tombe.
+
+## RYG Flag : 
+* Green : Nous avons fini de refactor le flow de transaction et de batch process client par client. Celui-ci est nettement moins rapide a realiser ( a peu pres 1m15s ). Mais se realise pour 2500
+  client (soit 30 ms par client). Precedament cela prenais 5 seconde environs, ce qui bloquer tout les client pendant 5 secondes.
+  Premiere recherche sur la comprehension du troisieme point lier au failOver inter region effectuer. L'idée et de savoir comment connecter les regions entres elles, pour repondre au besoin
+  immediat de fails-over, et plus tard une logique d'administration par region de regle.
+
 # Weekly Status ( Week 48 ) EVO
 
 ## What was done : 
