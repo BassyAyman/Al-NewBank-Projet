@@ -20,10 +20,10 @@ aurai 0 dans le debit, 40 dans sont compte ***MAIS*** 10 de debit dans la BD pos
 en meme temps vers le master, en fonction de celui qui passe en premier, l'on pourrai avoir un probleme.
 
 ## Scenario de mise en place du probleme
-BatchingProcess ---> Fait le batch sur le ClientX dans Master (argent - 50e, debit en cours 30e) -> Fin (argent - 20e, debit - 0e)
-ClientX ---> Transaction 10e -> Validation -> Mise a jour dans le debit de 10e soit un total sur la journée de 40e de debit dans redis -> Updating en cours vers master
-BatchingProcess ---> debit ClientX a 0 dans Redis -> Fin batch clientX
-ClientX ---> update de debit dans master fait --> (argent - 20e, debit - 10e)  ***INCOHERENCE***  REDIS(0e) et Master(10e) sur le debit.
+* BatchingProcess ---> Fait le batch sur le ClientX dans Master (argent - 50e, debit en cours 30e) -> Fin (argent - 20e, debit - 0e)
+* ClientX ---> Transaction 10e -> Validation -> Mise a jour dans le debit de 10e soit un total sur la journée de 40e de debit dans redis -> Updating en cours vers master
+* BatchingProcess ---> debit ClientX a 0 dans Redis -> Fin batch clientX
+* ClientX ---> update de debit dans master fait --> (argent - 20e, debit - 10e)  ***INCOHERENCE***  REDIS(0e) et Master(10e) sur le debit.
 
 
 ## Options envisagées
