@@ -22,7 +22,7 @@
   des conteneurs, et non pas via rest ou gPRC. Simplification du deploiement de la solution pour la demo).
 
 ## RYG Flag : 
-* Green : Integration de la nouvel implementation. Nous somme en train de grandement anticipé ce que nous allons faire a propos du failover pour garder la meme direction, meme apres 2 semaine de vacance de noel.
+* Green : Integration de la nouvel implementation. Nous somme en train de grandement anticipé ce que nous allons faire a propos du failover pour garder la meme direction, meme apres 2 semaine de vacance de noel. Nous nous somme rendu compte que notre problematique de failOver a soulever un problemee lier a nos donnée, en effet celle-ci on été faite dans le cadre de l'implementation d'une region, pendant la periode d'AL construction. Mais actuellement, pour faire communiquer des regions entre elles, nous nous somme rendu compte qu'au lieu d'essayer de mettre en place l'impossible au dessus de notre code, peut etre que revoir les données transitant durant le process de transaction et le retravailler allait nous permettre de mieux concevoir une solution a notre problematique de fails Overs.
 
 # Weekly Status ( Week 49 ) EVO
 
