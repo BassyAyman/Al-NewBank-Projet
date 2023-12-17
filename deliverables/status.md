@@ -1,3 +1,29 @@
+# Weekly Status ( Week 50 ) EVO
+
+## What was done : 
+* ADR_006 : BrainStorm pour savoir comment changer nos données pour qu'elle match un modele qui pourrai etre plus favorable a l'implementation du fail-over
+* Implementation du changement de modele de donnée de debit dans REDIS
+* Reflexion sur le fail-over
+
+## What is planned 
+* Implementation et scenario avec le nouveau modele de donnée, que sa casse rien
+* Voir pour la demo du fail over si on peut faire deux reseau differente avec docker compose, sinon on utilisera kubernetes avec mise en place de deux namespace differents pour la demo
+  (a voir aussi lequel sera le plus simple a faire)
+
+## What's the difference from last week
+* La nouvel implementation
+
+## Issues : 
+* None
+
+## Risk : 
+* A propos de la demo, Est-t-il vraiment necessaire de faire deux reseaux vraiment differents pour demontrer deux regions vraiment separé, pour faire la demo du failover.
+  Possibilité ou non de rester credible dans la demo meme si les deux "regions" sont dans le meme reseau (c'est a dire que la connection inter region peut se faire directement sur le plan
+  des conteneurs, et non pas via rest ou gPRC. Simplification du deploiement de la solution pour la demo).
+
+## RYG Flag : 
+* Green : Integration de la nouvel implementation. Nous somme en train de grandement anticipé ce que nous allons faire a propos du failover pour garder la meme direction, meme apres 2 semaine de vacance de noel.
+
 # Weekly Status ( Week 49 ) EVO
 
 ## What was done : 
