@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    depends_on:
+      - server-france
+      - server-germany
+    ports:
+      - "8030:8030"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
+  server-france:
+    image: "server-france"
+#    ports:
+#      - "8030:8030"
+    build:
+      context: ./spring-france
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 200M
+
+  server-germany:
+    image: "server-germany"
+#    ports:
+#      - "8031:8031"
+    build:
+      context: ./spring-germany
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 200M
