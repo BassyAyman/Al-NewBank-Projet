@@ -36,7 +36,7 @@ public class TransactionValidationManager implements ITransactionValidator {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private String GATEWAY = "http://gateway:8888";
+    private String GATEWAY = "http://gateway:8080";
 
     /**
      * Check if the transaction is valid, if not throw an exception.
@@ -96,6 +96,6 @@ public class TransactionValidationManager implements ITransactionValidator {
             throw new InvalidTransactionException("Account is not valid");
         }
         LOGGER.log(Level.INFO, "Transaction is validated (through gateway)");
-        return null;
+        return transaction;
     }
 }

@@ -16,6 +16,7 @@ function compile_dir()   # $1 is the dir to get it
 }
 
 compile_dir "update-service"
+compile_dir "greenlandGateway"
 compile_dir "TerminalTransactionVerificationService"
 compile_dir "WebTransactionService"
 

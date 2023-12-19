@@ -61,8 +61,7 @@ services:
     build:
       context: ./greenlandGateway
     depends_on:
-      postgres-master:
-        condition: service_healthy
+      - postgres-master
     networks:
       - igorbank-net
 
