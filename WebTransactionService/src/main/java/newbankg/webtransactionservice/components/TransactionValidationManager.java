@@ -71,4 +71,9 @@ public class TransactionValidationManager implements ITransactionValidator {
         // end of line
         return transaction;
     }
+
+    public Transaction makeTransactionWithGateway(Transaction transaction) throws InvalidTransactionException {
+        // todo call to gateway
+        return null;
+    }
 }
