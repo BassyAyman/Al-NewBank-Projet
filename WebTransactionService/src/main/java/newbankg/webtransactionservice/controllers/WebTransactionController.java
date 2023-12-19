@@ -32,8 +32,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
         private KafkaTemplate<String, Transaction> stringKafkaTemplate;
 
         @PostMapping(path = "payOnline", consumes = APPLICATION_JSON_VALUE)
-        public ResponseEntity<String> payOnline(@RequestBody Transaction transaction) {
+        public ResponseEntity<String> payOnline(@RequestBody Transaction transaction, @RequestParam String origin) {
             try {
+                if (!System.getenv("REGION").equals(origin)) {
+                    Transaction validatedTransaction = transactionValidator.makeTransactionWithGateway(transaction);
+                    stringKafkaTemplate.send("transactionWrite", validatedTransaction);
+                    LOGGER.info("Transaction successful: " + validatedTransaction.toString());
+                    return ResponseEntity.ok("(GATEWAY) Transaction successful");
+                }
                 Transaction validatedTransaction = transactionValidator.makeTransactionWithCardId(transaction);
                 stringKafkaTemplate.send("transactionWrite", validatedTransaction);
                 LOGGER.info("Transaction successful: " + validatedTransaction.toString());

@@ -6,4 +6,6 @@ public interface ITransactionValidator {
 
     Transaction makeTransactionWithCardId(Transaction transaction);
 
+    Transaction makeTransactionWithGateway(Transaction transaction);
+
 }

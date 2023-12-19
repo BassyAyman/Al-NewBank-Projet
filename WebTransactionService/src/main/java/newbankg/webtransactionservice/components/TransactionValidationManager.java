@@ -80,6 +80,7 @@ public class TransactionValidationManager implements ITransactionValidator {
     /*
     * Data will be retrieved from Greenland using gateway
     * */
+    @Override
     public Transaction makeTransactionWithGateway(Transaction transaction) throws InvalidTransactionException {
         String creditCardEndpoint = GATEWAY + "/creditCard?clientCreditCardNumber=" + transaction.clientCreditCardNumber();
         CreditCard creditCard = restTemplate.getForEntity(creditCardEndpoint, CreditCard.class).getBody();
