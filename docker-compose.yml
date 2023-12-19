@@ -43,12 +43,25 @@ services:
   # Web Transaction Service (Spring)
   web-transaction-service:
     image: "web-transaction-service"
+    environment:
+      - REGION=FR
     build:
       context: ./WebTransactionService
     depends_on:
       postgres-slave:
         condition: service_healthy
       redis:
+        condition: service_healthy
+    networks:
+      - igorbank-net
+
+  # Greenland gateway
+  gateway:
+    image: "gateway"
+    build:
+      context: ./greenlandGateway
+    depends_on:
+      postgres-master:
         condition: service_healthy
     networks:
       - igorbank-net
