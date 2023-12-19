@@ -1,5 +1,6 @@
 package newbank.gateway.greenlandgateway.controllers;
 
+import newbank.gateway.greenlandgateway.models.Account;
 import newbank.gateway.greenlandgateway.models.CreditCard;
 import newbank.gateway.greenlandgateway.repositories.AccountRepository;
 import newbank.gateway.greenlandgateway.repositories.CreditCardRepository;
@@ -26,6 +27,14 @@ public class GreenlandGatewayController {
         LOGGER.info("Gateway received call to retrieve credit card object");
         CreditCard creditCard = creditCardRepository.findByCreditCardNumber(clientCreditCardNumber);
         return ResponseEntity.ok(creditCard);
+    }
+
+    @GetMapping(path = "account")
+    public ResponseEntity<Account> getAccount(@RequestParam String clientCreditCardNumber){
+        LOGGER.info("Gateway received call to retrieve account object");
+        CreditCard creditCard = creditCardRepository.findByCreditCardNumber(clientCreditCardNumber);
+        Account account = accountRepository.findById(creditCard.getClientInformation().getCustomerIdentifier());
+        return ResponseEntity.ok(account);
     }
 
 }

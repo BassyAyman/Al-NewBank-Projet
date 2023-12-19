@@ -12,6 +12,7 @@ import newbankg.webtransactionservice.repositories.AccountRepository;
 import newbankg.webtransactionservice.repositories.CreditCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +33,10 @@ public class TransactionValidationManager implements ITransactionValidator {
     CreditCardRepository creditCardRepository;
     @Autowired
     RedisFunction redisFunction;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    private String GATEWAY = "http://gateway:8888";
 
     /**
      * Check if the transaction is valid, if not throw an exception.
@@ -72,8 +77,24 @@ public class TransactionValidationManager implements ITransactionValidator {
         return transaction;
     }
 
+    /*
+    * Data will be retrieved from Greenland using gateway
+    * */
     public Transaction makeTransactionWithGateway(Transaction transaction) throws InvalidTransactionException {
-        // todo call to gateway
+        String creditCardEndpoint = GATEWAY + "/creditCard?clientCreditCardNumber=" + transaction.clientCreditCardNumber();
+        CreditCard creditCard = restTemplate.getForEntity(creditCardEndpoint, CreditCard.class).getBody();
+        if (null == creditCard || !validateCardValidation.validateCardInTransactionContext(creditCard)) {
+            LOGGER.log(Level.INFO, "Card is not valid");
+            throw new InvalidTransactionException("Card is not valid");
+        }
+
+        String accountEndpoint = GATEWAY + "/account?clientCreditCardNumber=" + transaction.clientCreditCardNumber();
+        Account account = restTemplate.getForEntity(accountEndpoint, Account.class).getBody();
+        if (null == account || !accountValidator.checkAccount(account, transaction.amountOfTransaction())) {
+            LOGGER.log(Level.INFO, "Account is not valid");
+            throw new InvalidTransactionException("Account is not valid");
+        }
+        LOGGER.log(Level.INFO, "Transaction is validated (through gateway)");
         return null;
     }
 }
