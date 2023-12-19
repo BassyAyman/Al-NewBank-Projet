@@ -2,7 +2,7 @@
 
 set -f
 
-WEB="http://localhost:80/payOnline"
+WEB="http://localhost:80/payOnline?origin=FR"
 
 
 test_post() {
