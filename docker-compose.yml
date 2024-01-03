@@ -27,7 +27,7 @@ services:
 #    networks:
 #      - igorbank-net
 
-  # Web Transaction Service load balancer
+  # French web Transaction Service load balancer
   nginx-lb-web-fr:
     container_name: nginx-lb-web-fr
     image: nginx:latest
@@ -37,9 +37,25 @@ services:
     depends_on:
       - web-transaction-service-fr
     ports:
-      - "80:80" # port 81 for terminal transactions and port 80 for web transactions
+      - "80:80" # port 80 for France and 81 for Germany
     volumes:
       - ./WebTransactionService/nginx-fr.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - igorbank-net
+
+  # German web Transaction Service load balancer
+  nginx-lb-web-de:
+    container_name: nginx-lb-web-de
+    image: nginx:latest
+    environment:
+      - REGION=de
+      - FAILOVER_REGION=fr
+    depends_on:
+      - web-transaction-service-de
+    ports:
+      - "81:80" # port 80 for France and 81 for Germany
+    volumes:
+      - ./WebTransactionService/nginx-de.conf:/etc/nginx/nginx.conf:ro
     networks:
       - igorbank-net
 
@@ -52,6 +68,21 @@ services:
       context: ./WebTransactionService
     depends_on:
       postgres-slave-fr:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - igorbank-net
+
+  # Germany Web Transaction Service (Spring)
+  web-transaction-service-de:
+    image: "web-transaction-service"
+    environment:
+    - REGION=de # used in spring config to connect to the correct database and in spring to
+    build:
+      context: ./WebTransactionService
+    depends_on:
+      postgres-slave-de:
         condition: service_healthy
       redis:
         condition: service_healthy
