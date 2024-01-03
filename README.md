@@ -28,7 +28,7 @@ WebTransactionService load balancer listen on port `80`.
 Master database is supposed to be situated in Greenland.  
 You can find configurations in its service in the docker-compose file.
 ### Slave databases
-One database is supposed to be situated in France and the other one in Canada.  
+One database is supposed to be situated in France and the other one in Germany.  
 You can find configurations in their services in the docker-compose file.  
 These databases replicate all the data from the master database when it is updated.
 
