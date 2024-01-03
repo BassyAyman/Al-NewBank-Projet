@@ -3,52 +3,86 @@ version: '3.8'
 services:
 
   # Terminal Transaction Service load balancer
-  nginx-lb-terminal:
-    container_name: nginx-lb-terminal
+#  nginx-lb-terminal:
+#    container_name: nginx-lb-terminal
+#    image: nginx:latest
+#    depends_on:
+#      - terminal-transaction-service
+#    ports:
+#      - "81:80" # port 81 for terminal transactions and port 80 for web transactions
+#    volumes:
+#      - ./TerminalTransactionVerificationService/nginx.conf:/etc/nginx/nginx.conf:ro
+#    networks:
+#      - igorbank-net
+
+  # Terminal Transaction Service (Spring)
+#  terminal-transaction-service:
+#    container_name: terminal-transaction-service
+#    image: "terminal-transaction-service"
+#    build:
+#      context: ./TerminalTransactionVerificationService
+#    depends_on:
+#      postgres-slave-canada:
+#        condition: service_healthy
+#    networks:
+#      - igorbank-net
+
+  # French web Transaction Service load balancer
+  nginx-lb-web-fr:
+    container_name: nginx-lb-web-fr
     image: nginx:latest
+    environment:
+      - REGION=fr
+      - FAILOVER_REGION=de
     depends_on:
-      - terminal-transaction-service
+      - web-transaction-service-fr
     ports:
-      - "81:80" # port 81 for terminal transactions and port 80 for web transactions
+      - "80:80" # port 80 for France and 81 for Germany
     volumes:
-      - ./TerminalTransactionVerificationService/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./WebTransactionService/nginx-fr.conf:/etc/nginx/nginx.conf:ro
     networks:
       - igorbank-net
 
-  # Terminal Transaction Service (Spring)
-  terminal-transaction-service:
-    container_name: terminal-transaction-service
-    image: "terminal-transaction-service"
-    build:
-      context: ./TerminalTransactionVerificationService
+  # German web Transaction Service load balancer
+  nginx-lb-web-de:
+    container_name: nginx-lb-web-de
+    image: nginx:latest
+    environment:
+      - REGION=de
+      - FAILOVER_REGION=fr
     depends_on:
-      postgres-slave-canada:
+      - web-transaction-service-de
+    ports:
+      - "81:80" # port 80 for France and 81 for Germany
+    volumes:
+      - ./WebTransactionService/nginx-de.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - igorbank-net
+
+  # France Web Transaction Service (Spring)
+  web-transaction-service-fr:
+    image: "web-transaction-service"
+    environment:
+      - REGION=fr # used in spring config to connect to the correct database and in spring to
+    build:
+      context: ./WebTransactionService
+    depends_on:
+      postgres-slave-fr:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     networks:
       - igorbank-net
 
-  # Web Transaction Service load balancer
-  nginx-lb-web:
-    container_name: nginx-lb-web
-    image: nginx:latest
-    depends_on:
-      - web-transaction-service
-    ports:
-      - "80:80" # port 81 for terminal transactions and port 80 for web transactions
-    volumes:
-      - ./WebTransactionService/nginx.conf:/etc/nginx/nginx.conf:ro
-    networks:
-      - igorbank-net
-
-  # Web Transaction Service (Spring)
-  web-transaction-service:
+  # Germany Web Transaction Service (Spring)
+  web-transaction-service-de:
     image: "web-transaction-service"
     environment:
-      - REGION=FR
+    - REGION=de # used in spring config to connect to the correct database and in spring to
     build:
       context: ./WebTransactionService
     depends_on:
-      postgres-slave:
+      postgres-slave-de:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -128,8 +162,8 @@ services:
       - igorbank-net
 
   # PostGresDB slave read only located locally
-  postgres-slave:
-    container_name: postgres-slave
+  postgres-slave-fr:
+    container_name: postgres-slave-fr
     image: docker.io/bitnami/postgresql:11-debian-10
     ports:
       - "5433:5432"
@@ -158,8 +192,8 @@ services:
       retries: 10
 
   # PostGresDB slave read only located locally
-  postgres-slave-canada:
-    container_name: postgres-slave-canada
+  postgres-slave-de:
+    container_name: postgres-slave-de
     image: docker.io/bitnami/postgresql:11-debian-10
     ports:
       - "5434:5432"
