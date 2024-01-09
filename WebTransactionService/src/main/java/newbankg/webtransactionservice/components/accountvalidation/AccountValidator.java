@@ -7,8 +7,12 @@ import newbankg.webtransactionservice.models.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.logging.Logger;
+
 @Component
 public class AccountValidator implements IAccountValidator {
+
+    private static final Logger LOGGER = Logger.getLogger(AccountValidator.class.getName());
 
     @Autowired
     ILimitChecker limitChecker;
@@ -33,6 +37,7 @@ public class AccountValidator implements IAccountValidator {
                     newDebit + amountOfTransaction);
             return true;
         }
+        LOGGER.info("Account limit is reached");
         return false;
     }
 }
