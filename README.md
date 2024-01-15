@@ -34,6 +34,9 @@ You can find configurations in its service in the docker-compose file.
 One database is supposed to be situated in France and the other one in Germany.  
 You can find configurations in their services in the docker-compose file.  
 These databases replicate all the data from the master database when it is updated.
+### Redis debit database
+One database for each regions. Used to store the debit for each region client after it's first payement.
+Configuration can be find in the docker-compose file.
 
 ## Stress tests
 To execute stress tests, you need to have JMeter installed and launch the scenarios in the `JMeter` directory.
