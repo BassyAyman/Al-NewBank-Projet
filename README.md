@@ -6,6 +6,9 @@
 - Tobias Bonifay
 - Mathieu Schalkwijk
 
+## ADR's
+The ADR used to discuss architectural choices are here : 
+
 ## How to run
 Use script `prepareAll.sh` to run the project. It will build all the services and run them using the docker-compose file.
 
