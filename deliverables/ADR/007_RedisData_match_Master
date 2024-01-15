@@ -1,0 +1,34 @@
+# Redis Data dephasé par rapport au donnée de debit de master apres un FailOver
+
+* Statut : A Implementer
+* Date : 13/12/2023
+
+***Histoire technique*** : Suite a la mise en place de la nouvelles maniere de faire pour les transactions, nous passons par une base de données redis afin de 
+sauvegarder le debit d'un client en cours. Mais lorsque l'on donne la possibilité au client de realiser des transactions sans passer par redis mais directement
+via le Master, alors en resulte des soucis de coherence.
+
+## Contexte et énoncé du problème
+Nous avons realiser le mecanisme de failOver entre les differentes regions. Mais nous avons remarqué qu'apres que la region en etat de fail
+se relance, les données dans redis de cette region, etant recuperer des volumes, deviennent deprecated vis-a-vis des nouvelles valeurs de debit des clients enregistrer
+dans redis, et ayant effectuer un payement pendant l'etat de failOver.
+
+## Options envisagées
+### Utilisation du Batch Process
+#### Avantages
+* Aucun ajout dans le code a effectuer
+* Solution deja existante et fonctionnel, qui permet de remettre tous les debit du systeme a 0, et donc de remettre en phase redis et master
+#### Inconvénients
+* Un peu long a faire dans le cadre de la remise a disposition du service regionnal
+* Doit imperativement bloquer les usages pendants le batch process afin que les clients ne paye pas et donc ne provoque pas de nouvelle incoherence
+
+### Mise en place d'un rejoue d'evenement kafka depuis le groenland
+L'idée serai d'avoir une pipeline qui enregistre tous les evenements de debit issue d'un payement en failOver, issue d'une regions X, et d'avoir dans cette regions X
+un service consomateur de cette pipeline qui remette a jour dynamiquement REDIS.
+### Avantages
+* Dans le cas ou toute la region tombe, au redemarrage, le service commencera imediatement a remettre a jour redis
+* Processus bien plus rapide
+### Inconvenients
+* Solution a implementer, mise en place Zookeper + kafka au groenland et service d'update redis dans chaque regions
+* Solution gourmande en ressource (nouveau deploiement a effectuer)
+
+Au final a été decider d'implementer la premiere Option.
