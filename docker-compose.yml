@@ -73,6 +73,11 @@ services:
         condition: service_healthy
     networks:
       - igorbank-net
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1000M
 
   # Germany Web Transaction Service (Spring)
   web-transaction-service-de:
@@ -88,6 +93,11 @@ services:
         condition: service_healthy
     networks:
       - igorbank-net
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1000M
 
   # Greenland gateway
   gateway:
