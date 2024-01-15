@@ -39,5 +39,5 @@ données)
 La solution retenue est la première option (générer à l'avance un grand nombre de cartes). Le problème d'accès à la
 même ressource en base de donnée est bien trop important pour être ignoré.  
 **Implémentation**: Les données sont générées en amont des tests de charge dans un csv grâce au programme Java dans le
-répertoire [DatabasePopulation](../DatabasePopulation). Pour peupler la base de données, c'est cette même applicatoin
+répertoire [DatabasePopulation](../../DatabasePopulation). Pour peupler la base de données, c'est cette même applicatoin
 qui lit le csv et insère les données dans la base de données.

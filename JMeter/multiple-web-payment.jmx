@@ -16,7 +16,7 @@
           <stringProp name="LoopController.loops">1</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">2500</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1000</stringProp>
         <stringProp name="ThreadGroup.ramp_time">10</stringProp>
         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -34,7 +34,7 @@
                 <stringProp name="Argument.value">{&#xd;
   &quot;clientFirstName&quot;: &quot;John&quot;,&#xd;
   &quot;clientLastName&quot;: &quot;Doe&quot;,&#xd;
-  &quot;amountOfTransaction&quot;: 10,&#xd;
+  &quot;amountOfTransaction&quot;: 1,&#xd;
   &quot;clientCreditCardNumber&quot;: ${card},&#xd;
   &quot;clientCreditCartDateExpiration&quot;: &quot;12/25&quot;,&#xd;
   &quot;clientCVV&quot;: &quot;123&quot;&#xd;
@@ -45,7 +45,7 @@
           </elementProp>
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">80</stringProp>
-          <stringProp name="HTTPSampler.path">/payOnline</stringProp>
+          <stringProp name="HTTPSampler.path">/payOnline?origin=fr</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
