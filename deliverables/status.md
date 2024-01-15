@@ -1,3 +1,13 @@
+# auto-evaluation d'equipe 
+
+## Repartition des points : 
+* Ayman : 100 pts
+* Igor : 100 pts
+* Mathieu : 100 pts
+* Tobias : 100 pts
+
+Les membres de l'equipe ce sont tous inversit de maniere equivalente dans le projet, sur les differents aspect de celui .
+
 # Weekly Status ( Week 50 ) EVO
 
 ## What was done : 
