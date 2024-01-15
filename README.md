@@ -7,7 +7,7 @@
 - Mathieu Schalkwijk
 
 ## ADR's
-[The ADR used to discuss architectural choices](al-newbank-23-24-g-v7/delivrables/ADR) 
+[The ADR used to discuss architectural choices](delivrables/ADR) 
 
 ## How to run
 Use script `prepareAll.sh` to run the project. It will build all the services and run them using the docker-compose file.
